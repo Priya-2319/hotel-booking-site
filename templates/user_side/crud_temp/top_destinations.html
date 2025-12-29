@@ -1,0 +1,49 @@
+{% extends 'user_side/index.html' %}
+
+{% block title %}
+Top Destinations
+{% endblock %}
+
+{% block content %}
+<div class="container mt-3 mb-3">
+  <h2 class="text-center mb-4">Trending Destinations</h2>
+  <div class="row row-cols-2 row-cols-md-4 g-3">
+
+    {% for city in cities %}
+    <div class="col">
+      <div class="card border-0 position-relative overflow-hidden shadow-sm">
+        <a href="{{ url_for('property_search') }}?destination={{ city }}&check_in={{ today }}&check_out={{ tomorrow }}&guests=1">
+          <div class="city-name position-absolute top-0 w-100 px-2 py-2 text-white">
+            <strong>{{ city }}</strong>
+          </div>
+          <img src="{{ url_for('static', filename='uploads/Top_Destination/' ~ city ~ '.png') }}" 
+               class="card-img-top img-fluid" alt="{{ city }}">
+        </a>
+      </div>
+    </div>
+    {% endfor %}
+
+  </div>
+</div>
+
+<style>
+.card {
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.card:hover {
+  transform: scale(1.05);
+}
+.city-name {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+<!-- .card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+} -->
+</style>
+{% endblock %}

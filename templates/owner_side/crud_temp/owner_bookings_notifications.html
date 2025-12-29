@@ -1,0 +1,50 @@
+{% extends "owner_side/index.html" %}
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">Bookings Notifications</h2>
+        <div class="btn-group">
+            <a href="{{ url_for('owner_bookings_notifications', filter_type='all') }}" 
+               class="btn btn-outline-primary {% if filter_type == 'all' %}active{% endif %}">
+                All
+            </a>
+            <a href="{{ url_for('owner_bookings_notifications', filter_type='unread') }}" 
+               class="btn btn-outline-warning {% if filter_type == 'unread' %}active{% endif %}">
+                Unread
+            </a>
+            <a href="{{ url_for('owner_bookings_notifications', filter_type='read') }}" 
+               class="btn btn-outline-success {% if filter_type == 'read' %}active{% endif %}">
+                Read
+            </a>
+        </div>
+    </div>
+
+    {% if notifications %}
+        <ul class="list-group shadow-sm">
+            {% for notif in notifications %}
+                <li class="list-group-item d-flex justify-content-between align-items-start {% if not notif.is_read %}bg-light{% endif %}">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">
+                            {{ notif.title }}
+                            {% if not notif.is_read %}
+                                <span class="badge bg-warning text-dark ms-2">Unread</span>
+                            {% endif %}
+                        </div>
+                        <small class="text-muted">{{ notif.message }}</small><br>
+                        <small class="text-secondary">
+                            <i class="fas fa-clock"></i> {{ notif.created_at.strftime('%Y-%m-%d %H:%M') }}
+                        </small>
+                    </div>
+                    {% if not notif.is_read %}
+                        <form method="POST" action="{{ url_for('mark_owner_notification_read', notif_id=notif.id) }}">
+                            <button type="submit" class="btn btn-sm btn-outline-success">Mark Read</button>
+                        </form>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="alert alert-info">No notifications found.</div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,363 @@
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    main {
+        flex: 1;
+        /* Your main content styles here */
+    }
+
+    .footer-container {
+        position: relative;
+        width: 100%;
+        color: white;
+        overflow: hidden;
+        padding: 50px 0 20px;
+        /* Combined background - image with gradient overlay */
+        background: 
+            linear-gradient(to bottom, 
+                rgba(0, 60, 100, 0.85) 0%, 
+                rgba(0, 30, 60, 0.95) 100%),
+            url('https://images.unsplash.com/photo-1519046904884-53103b34b206?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center;
+        background-size: cover;
+        background-attachment: fixed;
+    }
+
+    .fish-background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        overflow: hidden;
+    }
+
+    .fish {
+        position: absolute;
+        width: 80px;
+        height: 50px;
+        background-size: contain;
+        background-repeat: no-repeat;
+        filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+        z-index: 1;
+        opacity: 0.8;
+    }
+
+    .footer-content {
+        position: relative;
+        z-index: 2;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+    }
+
+    .footer-column h3 {
+        font-size: 1.3rem;
+        margin-bottom: 20px;
+        position: relative;
+        padding-bottom: 10px;
+    }
+
+    .footer-column h3::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 50px;
+        height: 2px;
+        background: #ffcc00;
+    }
+
+    .footer-column ul {
+        list-style: none;
+    }
+
+    .footer-column ul li {
+        margin-bottom: 10px;
+    }
+
+    .footer-column ul li a {
+        color: #ddd;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+
+    .footer-column ul li a:hover {
+        color: #ffcc00;
+        transform: translateX(5px);
+    }
+
+    .footer-column p {
+        color: #ddd;
+        margin-bottom: 15px;
+        line-height: 1.6;
+    }
+
+    .social-links {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .social-links a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        color: white;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+    }
+
+    .social-links a:hover {
+        background: #ffcc00;
+        color: #003366;
+        transform: translateY(-5px);
+    }
+
+    .footer-bottom {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        padding-top: 30px;
+        margin-top: 30px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .footer-bottom p {
+        color: #aaa;
+        font-size: 0.9rem;
+    }
+
+    /* Bubbles animation */
+    .bubble {
+        position: absolute;
+        bottom: -100px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        animation: rise 15s infinite ease-in;
+        z-index: 1;
+    }
+
+    @keyframes rise {
+        0% {
+            bottom: -100px;
+            transform: translateX(0);
+            opacity: 0;
+        }
+        50% {
+            opacity: 0.4;
+        }
+        100% {
+            bottom: 100%;
+            transform: translateX(100px);
+            opacity: 0;
+        }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .footer-content {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .footer-column {
+            margin-bottom: 20px;
+        }
+
+        .footer-column h3 {
+            margin-bottom: 15px;
+        }
+        
+        .footer-container {
+            background-attachment: scroll;
+        }
+    }
+
+    /* Fish animation styles */
+    @keyframes swim {
+        0% {
+            transform: translateX(-100px) scaleX(1);
+        }
+        50% {
+            transform: translateX(calc(50vw - 50px)) scaleX(1);
+        }
+        51% {
+            transform: translateX(calc(50vw - 50px)) scaleX(-1);
+        }
+        100% {
+            transform: translateX(calc(100vw + 100px)) scaleX(-1);
+        }
+    }
+
+    @keyframes swimReverse {
+        0% {
+            transform: translateX(calc(100vw + 100px)) scaleX(-1);
+        }
+        50% {
+            transform: translateX(calc(50vw - 50px)) scaleX(-1);
+        }
+        51% {
+            transform: translateX(calc(50vw - 50px)) scaleX(1);
+        }
+        100% {
+            transform: translateX(-100px) scaleX(1);
+        }
+    }
+</style>
+
+<footer class="footer-container">
+    <div class="fish-background" id="fishContainer"></div>
+    
+    <div class="footer-content">
+        <div class="footer-column">
+            <h3>About Us</h3>
+            <p>Book your dream vacation with our premium hotel booking service. We offer the best deals for luxury accommodations worldwide.</p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+        
+        <div class="footer-column">
+            <h3>Quick Links</h3>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Hotels</a></li>
+                <li><a href="#">Destinations</a></li>
+                <li><a href="#">Special Offers</a></li>
+                <li><a href="#">Blog</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-column">
+            <h3>Support</h3>
+            <ul>
+                <li><a href="#">FAQs</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact Us</a></li>
+                <li><a href="{{ url_for('terms_conditions') }}">Privacy Policy</a></li>
+                <li><a href="{{ url_for('terms_conditions') }}">Terms & Conditions</a></li>
+                <li><a href="{{ url_for('cancelation_policy') }}">Cancellation Policy</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-column">
+            <h3>Contact Info</h3>
+            <p><i class="fas fa-map-marker-alt"></i> 123 Ocean View, Beachfront City</p>
+            <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+            <p><i class="fas fa-envelope"></i> info@hotelbooking.com</p>
+            <p><i class="fas fa-clock"></i> 24/7 Customer Support</p>
+        </div>
+    </div>
+    
+    <div class="footer-bottom">
+        <p>&copy; 2025 LuxStay.com. All Rights Reserved.</p>
+    </div>
+</footer>
+
+<!-- Font Awesome for icons -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const fishContainer = document.getElementById('fishContainer');
+        const fishColors = ['#FFD700', '#FF6347', '#00FFFF', '#FF69B4', '#7FFFD4'];
+        const fishTypes = [
+            'M5,25 C15,5 35,5 45,25 C35,45 15,45 5,25 Z', // Basic fish shape
+            'M5,25 C10,5 30,10 45,20 C40,40 20,40 5,25 Z', // Angelfish shape
+            'M5,25 C15,10 35,10 45,25 C35,40 15,40 5,25 Z'  // Rounder fish
+        ];
+        
+        // Create bubbles
+        function createBubbles() {
+            for (let i = 0; i < 20; i++) {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                
+                const size = Math.random() * 30 + 10;
+                const left = Math.random() * 100;
+                const delay = Math.random() * 15;
+                const duration = Math.random() * 10 + 10;
+                
+                bubble.style.width = `${size}px`;
+                bubble.style.height = `${size}px`;
+                bubble.style.left = `${left}%`;
+                bubble.style.animationDelay = `${delay}s`;
+                bubble.style.animationDuration = `${duration}s`;
+                
+                fishContainer.appendChild(bubble);
+            }
+        }
+        
+        function createFish() {
+            const fish = document.createElement('div');
+            fish.className = 'fish';
+            
+            // Random fish properties
+            const size = Math.random() * 30 + 50;
+            const color = fishColors[Math.floor(Math.random() * fishColors.length)];
+            const duration = Math.random() * 15 + 15;
+            const delay = Math.random() * 10;
+            const top = Math.random() * 80 + 10;
+            const swimDirection = Math.random() > 0.5 ? 'swim' : 'swimReverse';
+            
+            // Create SVG for fish
+            const fishSVG = `
+                <svg viewBox="0 0 50 50" width="${size}" height="${size/2}">
+                    <path d="${fishTypes[Math.floor(Math.random() * fishTypes.length)]}" fill="${color}">
+                        <animate attributeName="d" values="
+                            M5,25 C15,5 35,5 45,25 C35,45 15,45 5,25 Z;
+                            M5,25 C15,10 30,5 45,25 C30,45 15,40 5,25 Z;
+                            M5,25 C15,5 35,5 45,25 C35,45 15,45 5,25 Z"
+                            dur="2s" repeatCount="indefinite"/>
+                    </path>
+                    <circle cx="38" cy="20" r="2" fill="black"/>
+                </svg>
+            `;
+            
+            fish.innerHTML = fishSVG;
+            fish.style.top = `${top}%`;
+            fish.style.animation = `${swimDirection} ${duration}s linear ${delay}s infinite`;
+            
+            fishContainer.appendChild(fish);
+        }
+        
+        // Create multiple fish and bubbles
+        createBubbles();
+        for (let i = 0; i < 10; i++) {
+            createFish();
+        }
+        
+        // Responsive adjustment
+        window.addEventListener('resize', function() {
+            const fishElements = document.querySelectorAll('.fish');
+            fishElements.forEach(fish => {
+                const currentAnimation = fish.style.animation;
+                fish.style.animation = 'none';
+                void fish.offsetWidth; // Trigger reflow
+                fish.style.animation = currentAnimation;
+            });
+        });
+    });
+</script>

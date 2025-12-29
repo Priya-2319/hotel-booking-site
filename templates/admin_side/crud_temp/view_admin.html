@@ -1,0 +1,84 @@
+{% extends 'admin_side/index.html' %}
+
+{% block title %}Admin Details{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header with back button -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-primary mb-0">Administrator Details</h2>
+        <div>
+            <a href="{{ url_for('view_all_admins') }}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left-circle me-1"></i> Back
+            </a>
+        </div>
+    </div>
+
+    <!-- Card with profile -->
+    <div class="card shadow-lg border-0 rounded-3">
+        <div class="row g-0">
+            <!-- Profile Picture -->
+            <div class="col-md-4 d-flex justify-content-center align-items-center p-4 bg-light">
+                {% if admin.profile_picture %}
+                    <a href="{{ url_for('static', filename='profiles_pictures/admin_profile_pic/' + admin.profile_picture) }}"
+                        target="_blank">
+                        <img src="{{ url_for('static', filename='profiles_pictures/admin_profile_pic/' + admin.profile_picture) }}"
+                            alt="Profile Picture" class="img-fluid rounded-circle shadow"
+                            style="width: 200px; height: 200px; object-fit: cover;">
+                    </a>
+                {% else %}
+                    <i class="bi bi-person-circle text-secondary" style="font-size: 10rem;"></i>
+                {% endif %}
+            </div>
+
+            <!-- Details -->
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h4 class="card-title fw-bold text-dark">{{ admin.name }}</h4>
+                    <p class="text-muted mb-2">Admin Code: <span class="badge bg-secondary">{{ admin.admin_code }}</span></p>
+                    <hr>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p><i class="bi bi-envelope-fill me-2 text-primary"></i> <strong>Email:</strong> {{ admin.email }}</p>
+                            <p><i class="bi bi-phone-fill me-2 text-success"></i> <strong>Phone:</strong> {{ admin.phone }}</p>
+                            <p><i class="bi bi-calendar-date me-2 text-info"></i> <strong>DOB:</strong> {{ admin.dob.strftime('%d %B %Y') }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><i class="bi bi-geo-alt-fill me-2 text-danger"></i> <strong>Address:</strong> {{ admin.address or "N/A" }}</p>
+                            <p><i class="bi bi-person-badge-fill me-2 text-warning"></i> <strong>ID Type:</strong> {{ admin.id_type or "N/A" }}</p>
+                            <p><i class="bi bi-card-text me-2 text-secondary"></i> <strong>ID Number:</strong> {{ admin.id_number or "N/A" }}</p>
+                        </div>
+                    </div>
+
+                    <p class="mb-2"><i class="bi bi-clock-history me-2"></i><strong>Created At:</strong> {{ admin.created_at.strftime('%d %B %Y, %I:%M %p') }}</p>
+                    <p class="mb-4"><i class="bi bi-arrow-repeat me-2"></i><strong>Last Updated:</strong> {{ admin.updated_at.strftime('%d %B %Y, %I:%M %p') }}</p>
+
+                    <!-- Status & Toggle Button -->
+                    <div class="d-flex align-items-center gap-3">
+                        <span class="fw-semibold">Status: 
+                            {% if admin.status == 'Active' %}
+                                <span class="badge bg-success">Active</span>
+                            {% else %}
+                                <span class="badge bg-danger">Suspended</span>
+                            {% endif %}
+                        </span>
+
+                        {% if admin.status == 'Active' %}
+                            <a href="{{ url_for('toggle_admin_status', admin_id=admin.id) }}" 
+                               class="btn btn-danger btn-sm shadow-sm">
+                                <i class="bi bi-slash-circle me-1"></i> Suspend
+                            </a>
+                        {% else %}
+                            <a href="{{ url_for('toggle_admin_status', admin_id=admin.id) }}" 
+                               class="btn btn-success btn-sm shadow-sm">
+                                <i class="bi bi-check-circle me-1"></i> Activate
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

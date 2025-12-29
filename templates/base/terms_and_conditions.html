@@ -1,0 +1,354 @@
+{% extends 'base/index.html' %}  <!-- Replace with your actual base template -->
+{% block title %}Terms & Conditions{% endblock %}
+
+{% block content %}
+<div class="terms-container mt-4 mb-3" style="
+    background: linear-gradient(rgba(255, 255, 255, 0.95), 
+                url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');
+    background-size: cover;
+    background-attachment: fixed;
+    min-height: 100vh;
+    padding: 4rem 0;
+">
+    <div class="container">
+        <div class="terms-card animate__animated animate__fadeIn" style="
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border: none;
+        ">
+            <!-- Header with Gradient -->
+            <div class="terms-header text-center py-5" style="
+                background: linear-gradient(135deg, #62093a 0%, #0b5e51 100%);
+                color: white;
+            ">
+                <h1 class="display-4 fw-bold mb-3">LuxStay Terms & Conditions</h1>
+                <p class="lead mb-0">Last Updated: {{ now.strftime('%B %d, %Y') }}</p>
+            </div>
+
+            <div class="terms-body p-4 p-md-5">
+                <!-- Introduction -->
+                <section class="mb-5 animate__animated animate__fadeInUp">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="icon-box me-3" style="
+                            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+                            width: 50px;
+                            height: 50px;
+                            border-radius: 12px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        ">
+                            <i class="fas fa-info-circle text-white fs-4"></i>
+                        </div>
+                        <h2 class="mb-0">Introduction</h2>
+                    </div>
+                    <p class="text-muted">
+                        Welcome to LuxStay. These Terms and Conditions govern your use of our website and services. 
+                        By accessing or using LuxStay, you agree to be bound by these terms. If you disagree with any part, 
+                        you may not access our services.
+                    </p>
+                </section>
+
+                <!-- Bookings Section -->
+                <section class="mb-5 animate__animated animate__fadeInUp animate__delay-1s">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="icon-box me-3" style="
+                            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                            width: 50px;
+                            height: 50px;
+                            border-radius: 12px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        ">
+                            <i class="fas fa-calendar-check text-white fs-4"></i>
+                        </div>
+                        <h2 class="mb-0">Bookings & Reservations</h2>
+                    </div>
+                    <div class="terms-content">
+                        <div class="term-item mb-3">
+                            <h5 class="d-flex align-items-center">
+                                <span class="term-bullet me-2" style="
+                                    display: inline-block;
+                                    width: 24px;
+                                    height: 24px;
+                                    background: #4facfe;
+                                    color: white;
+                                    border-radius: 50%;
+                                    text-align: center;
+                                    line-height: 24px;
+                                    font-size: 14px;
+                                ">1</span>
+                                Reservation Requirements
+                            </h5>
+                            <p class="text-muted ms-4 ps-3">
+                                All bookings require valid payment information. Guests must be at least 18 years old to reserve a room.
+                            </p>
+                        </div>
+                        <div class="term-item mb-3">
+                            <h5 class="d-flex align-items-center">
+                                <span class="term-bullet me-2" style="
+                                    display: inline-block;
+                                    width: 24px;
+                                    height: 24px;
+                                    background: #4facfe;
+                                    color: white;
+                                    border-radius: 50%;
+                                    text-align: center;
+                                    line-height: 24px;
+                                    font-size: 14px;
+                                ">2</span>
+                                Cancellation Policy
+                            </h5>
+                            <p class="text-muted ms-4 ps-3">
+                                Cancellations made 48+ hours before check-in receive full refund. Within 48 hours, 50% of total stay will be charged.
+                            </p>
+                        </div>
+                        <div class="term-item mb-3">
+                            <h5 class="d-flex align-items-center">
+                                <span class="term-bullet me-2" style="
+                                    display: inline-block;
+                                    width: 24px;
+                                    height: 24px;
+                                    background: #4facfe;
+                                    color: white;
+                                    border-radius: 50%;
+                                    text-align: center;
+                                    line-height: 24px;
+                                    font-size: 14px;
+                                ">3</span>
+                                No-Shows
+                            </h5>
+                            <p class="text-muted ms-4 ps-3">
+                                Failure to check-in without prior cancellation will result in full charge of the reservation.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Payments Section -->
+                <section class="mb-5 animate__animated animate__fadeInUp animate__delay-2s">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="icon-box me-3" style="
+                            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+                            width: 50px;
+                            height: 50px;
+                            border-radius: 12px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        ">
+                            <i class="fas fa-credit-card text-white fs-4"></i>
+                        </div>
+                        <h2 class="mb-0">Payments & Pricing</h2>
+                    </div>
+                    <div class="terms-content">
+                        <div class="term-item mb-3">
+                            <h5 class="d-flex align-items-center">
+                                <span class="term-bullet me-2" style="
+                                    display: inline-block;
+                                    width: 24px;
+                                    height: 24px;
+                                    background: #f5576c;
+                                    color: white;
+                                    border-radius: 50%;
+                                    text-align: center;
+                                    line-height: 24px;
+                                    font-size: 14px;
+                                ">1</span>
+                                Pricing
+                            </h5>
+                            <p class="text-muted ms-4 ps-3">
+                                All prices are in USD and include applicable taxes. We reserve the right to correct pricing errors.
+                            </p>
+                        </div>
+                        <div class="term-item mb-3">
+                            <h5 class="d-flex align-items-center">
+                                <span class="term-bullet me-2" style="
+                                    display: inline-block;
+                                    width: 24px;
+                                    height: 24px;
+                                    background: #f5576c;
+                                    color: white;
+                                    border-radius: 50%;
+                                    text-align: center;
+                                    line-height: 24px;
+                                    font-size: 14px;
+                                ">2</span>
+                                Payment Methods
+                            </h5>
+                            <p class="text-muted ms-4 ps-3">
+                                We accept Visa, MasterCard, American Express, and PayPal. All transactions are secured with SSL encryption.
+                            </p>
+                        </div>
+                        <div class="term-item mb-3">
+                            <h5 class="d-flex align-items-center">
+                                <span class="term-bullet me-2" style="
+                                    display: inline-block;
+                                    width: 24px;
+                                    height: 24px;
+                                    background: #f5576c;
+                                    color: white;
+                                    border-radius: 50%;
+                                    text-align: center;
+                                    line-height: 24px;
+                                    font-size: 14px;
+                                ">3</span>
+                                Security Deposit
+                            </h5>
+                            <p class="text-muted ms-4 ps-3">
+                                A security deposit of $100 may be required at check-in, refundable after inspection of the room.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Guest Responsibilities -->
+                <section class="mb-5 animate__animated animate__fadeInUp animate__delay-3s">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="icon-box me-3" style="
+                            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+                            width: 50px;
+                            height: 50px;
+                            border-radius: 12px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        ">
+                            <i class="fas fa-user-shield text-white fs-4"></i>
+                        </div>
+                        <h2 class="mb-0">Guest Responsibilities</h2>
+                    </div>
+                    <div class="terms-content">
+                        <div class="term-item mb-3">
+                            <h5 class="d-flex align-items-center">
+                                <span class="term-bullet me-2" style="
+                                    display: inline-block;
+                                    width: 24px;
+                                    height: 24px;
+                                    background: #43e97b;
+                                    color: white;
+                                    border-radius: 50%;
+                                    text-align: center;
+                                    line-height: 24px;
+                                    font-size: 14px;
+                                ">1</span>
+                                Property Care
+                            </h5>
+                            <p class="text-muted ms-4 ps-3">
+                                Guests are responsible for any damage beyond normal wear and tear during their stay.
+                            </p>
+                        </div>
+                        <div class="term-item mb-3">
+                            <h5 class="d-flex align-items-center">
+                                <span class="term-bullet me-2" style="
+                                    display: inline-block;
+                                    width: 24px;
+                                    height: 24px;
+                                    background: #43e97b;
+                                    color: white;
+                                    border-radius: 50%;
+                                    text-align: center;
+                                    line-height: 24px;
+                                    font-size: 14px;
+                                ">2</span>
+                                Noise & Conduct
+                            </h5>
+                            <p class="text-muted ms-4 ps-3">
+                                Quiet hours are from 10PM to 8AM. Disruptive behavior may result in immediate eviction without refund.
+                            </p>
+                        </div>
+                        <div class="term-item mb-3">
+                            <h5 class="d-flex align-items-center">
+                                <span class="term-bullet me-2" style="
+                                    display: inline-block;
+                                    width: 24px;
+                                    height: 24px;
+                                    background: #43e97b;
+                                    color: white;
+                                    border-radius: 50%;
+                                    text-align: center;
+                                    line-height: 24px;
+                                    font-size: 14px;
+                                ">3</span>
+                                Smoking Policy
+                            </h5>
+                            <p class="text-muted ms-4 ps-3">
+                                All LuxStay properties are non-smoking. A $250 cleaning fee will be charged for violations.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Footer Acceptance -->
+                <div class="terms-acceptance text-center py-4 mt-4" style="
+                    background: rgba(30, 60, 114, 0.05);
+                    border-radius: 12px;
+                    border: 1px dashed rgba(30, 60, 114, 0.3);
+                ">
+                    <p class="mb-0 text-muted">
+                        By using LuxStay services, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Animation for scrolling */
+    .terms-container section {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.6s ease;
+    }
+    
+    .terms-container section.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .terms-header {
+            padding: 3rem 1rem;
+        }
+        
+        .terms-header h1 {
+            font-size: 2rem;
+        }
+        
+        .terms-body {
+            padding: 2rem;
+        }
+    }
+    
+    /* Smooth scrolling for anchor links */
+    html {
+        scroll-behavior: smooth;
+    }
+</style>
+
+<script>
+    // Intersection Observer for scroll animations
+    document.addEventListener('DOMContentLoaded', function() {
+        const sections = document.querySelectorAll('.terms-container section');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {threshold: 0.1});
+        
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+    });
+</script>
+
+{% endblock %}

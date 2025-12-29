@@ -1,0 +1,47 @@
+{% extends 'admin_side/index.html' %}
+{% block title %}
+    Owners List
+{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mx-5 bg-warning rounded mt-4 mb-4">   
+        <span class="px-4 text-primary">Registered Property Owners On LuxStay</span>
+        <h2 class="text-center mx-5">Owners List</h2>
+        <span class="px-4">Last Updated : {{ today_date }}</span>
+    </div>
+    
+    <div class="container">
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">S.No.</th>
+                    <th scope="col">Owner Code</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">DOB</th>
+                    <th scope="col">address</th>
+                    <th scope="col">Joined Since</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for owner in owners %}
+                <tr>
+                    <th scope="row">{{ loop.index }}</th>
+                    <td>{{ owner.owner_code }}</td>
+                    <td>{{ owner.name }}</td>
+                    <td>{{ owner.email }}</td>
+                    <td>{{ owner.phone }}</td>
+                    <td>{{ owner.dob }}</td>
+                    <td>{{ owner.address }}</td>
+                    <!-- only date -->
+                    <td>{{ owner.created_at.strftime('%Y-%m-%d') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <!-- go to dashboard -->
+    <div class="container mb-4 text-center">
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary text-warning"><i class="bi bi-house-door-fill"></i> Back to Dashboard</a>
+{% endblock %}

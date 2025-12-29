@@ -1,0 +1,40 @@
+{% extends 'user_side/index.html' %}
+
+{% block title %}Booking | {{ property.property_name }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h2 class="mb-4">Confirm Your Booking</h2>
+
+    <div class="card p-4">
+        <h4 class="mb-3">Property: {{ property.property_name }}</h4>
+        <p><strong>Type:</strong> {{ property.property_type }}</p>
+        <p><strong>Address:</strong> {{ property.street_address }}, {{ property.city }}, {{ property.state }}, {{ property.country }}</p>
+
+        <hr>
+
+        <h5>Room Details</h5>
+        <p><strong>Room Number:</strong> {{ room.room_number }}</p>
+        <p><strong>Room Type:</strong> {{ room.room_type }}</p>
+        <p><strong>Price per Night:</strong> ${{ room.price_per_night }}</p>
+        <p><strong>Capacity:</strong> {{ room.capacity }} guests</p>
+        <p><strong>Bed Type:</strong> {{ room.bed_type }}</p>
+
+        <hr>
+
+        <h5>Booking Details</h5>
+        <p><strong>Check-In:</strong> {{ check_in }} ; 12:00PM</p>
+        <p><strong>Check-Out:</strong> {{ check_out }} ; 11:00AM</p>
+        <p><strong>No. of Guests:</strong> {{ guests }}</p>
+
+        <form method="POST">
+            <!-- Hidden fields to pass data on POST -->
+            <input type="hidden" name="check_in" value="{{ check_in }}">
+            <input type="hidden" name="check_out" value="{{ check_out }}">
+            <input type="hidden" name="guests" value="{{ guests }}">
+            <input type="hidden" name="room_id" value="{{ room.id }}">
+            <button type="submit" class="btn btn-primary mt-3">Confirm Booking</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

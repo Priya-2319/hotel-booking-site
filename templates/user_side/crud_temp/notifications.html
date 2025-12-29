@@ -1,0 +1,81 @@
+{% extends 'user_side/index.html' %}
+
+{% block title %}My Notifications{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Page header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <h2 class="fw-bold text-primary mb-0">
+            <i class="fas fa-bell me-2"></i> My Notifications
+        </h2>
+        {% if notifications %}
+        <a href="{{ url_for('mark_all_read') }}" class="btn btn-outline-success btn-sm shadow-sm rounded-pill px-3">
+            <i class="fas fa-check-double me-1"></i> Mark All as Read
+        </a>
+        {% endif %}
+    </div>
+
+    {% if notifications %}
+    <div class="card shadow-lg border-0 rounded-3">
+        <div class="list-group list-group-flush">
+            {% for n in notifications %}
+            <div class="list-group-item d-flex align-items-start flex-wrap py-3 
+                        {% if (n.type != 'All' and not n.is_read) or (n.type == 'All' and n.id not in read_global_ids) %}
+                            bg-light
+                        {% endif %}">
+
+                <!-- Icon based on type -->
+                <div class="me-3 fs-4 text-primary">
+                    {% if n.type == "success" %}
+                        <i class="fas fa-check-circle text-success"></i>
+                    {% elif n.type == "warning" %}
+                        <i class="fas fa-exclamation-triangle text-warning"></i>
+                    {% elif n.type == "error" %}
+                        <i class="fas fa-times-circle text-danger"></i>
+                    {% elif n.type == "All" %}
+                        <i class="fas fa-bullhorn text-info"></i>
+                    {% else %}
+                        <i class="fas fa-bell text-primary"></i>
+                    {% endif %}
+                </div>
+
+                <!-- Content -->
+                <div class="flex-grow-1">
+                    <div class="fw-semibold">{{ n.title }}</div>
+                    <div class="text-muted small">{{ n.message }}</div>
+                    <div class="text-muted small fst-italic">{{ n.created_at.strftime('%b %d, %I:%M %p') }}</div>
+                </div>
+
+                <!-- Mark Read button -->
+                {% if (n.type != 'All' and not n.is_read) or (n.type == 'All' and n.id not in read_global_ids) %}
+                <div class="ms-auto mt-2 mt-sm-0">
+                    <a href="{{ url_for('mark_single_read', notification_id=n.id) }}" 
+                       class="btn btn-sm btn-outline-secondary rounded-pill px-3">
+                        <i class="fas fa-check me-1"></i> Mark Read
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-info text-center shadow-sm py-4">
+        <i class="fas fa-bell-slash fa-2x mb-2 d-block"></i>
+        <div class="fw-semibold">You have no notifications yet.</div>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+/* Improve hover effect */
+.list-group-item {
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+.list-group-item:hover {
+    background: #f8f9fa;
+    transform: translateY(-2px);
+}
+</style>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends 'owner_side/index.html' %}
+{% block title %}Property Reviews{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-gradient-primary shadow-lg border-0 rounded-4">
+                <div class="card-body text-center text-white p-4">
+                    <h2 class="mb-1"><i class="fas fa-star me-2"></i>Property Reviews</h2>
+                    <p class="mb-0 opacity-75">
+                        Hello <strong>{{ owner.name }}</strong>, here are the reviews for your properties.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if reviews %}
+    <div class="row g-4">
+        {% for review in reviews %}
+        <div class="col-lg-6">
+            <div class="card shadow border-0 rounded-4">
+                <div class="card-header bg-gradient-info text-white d-flex justify-content-between align-items-center rounded-top-4">
+                    <span class="fw-bold text-dark">{{ review.user.name }}</span>
+                    <span class="badge bg-light text-dark">{{ review.rating }} / 5 <i class="fas fa-star text-warning"></i></span>
+                </div>
+                <div class="card-body">
+                    <p class="mb-2"><strong>Property:</strong> {{ review.property.property_name }}</p>
+                    <!-- booking details -->
+                    <p class="mb-2"><strong>Booking Code:</strong> {{ review.booking.booking_code }}</p>
+                    <hr>
+                    <p class="mb-0"><Strong>Comment:</Strong> {{ review.comment or "No comment provided." }}</p>
+                </div>
+                <div class="card-footer text-muted small">
+                    Reviewed on {{ review.review_date.strftime("%d %b %Y, %I:%M %p") }}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <i class="fas fa-star-half-alt fa-3x text-muted mb-3"></i>
+        <h5 class="text-muted">No reviews found</h5>
+        <p class="text-muted">Your properties have not received any reviews yet.</p>
+    </div>
+    {% endif %}
+
+    <!-- Back Button -->
+    <div class="text-center mt-4">
+        <a href="{{ url_for('owner_dashboard') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+        </a>
+    </div>
+</div>
+
+<style>
+    .bg-gradient-primary {
+        background: linear-gradient(87.4deg, #4e54c8 0%, #8f94fb 100%) !important;
+    }
+    .bg-gradient-info {
+        background: linear-gradient(87.4deg, #36d1dc 0%, #5b86e5 100%) !important;
+    }
+    .card {
+        border-radius: 16px;
+    }
+    .btn {
+        border-radius: 8px;
+        font-weight: 500;
+    }
+</style>
+{% endblock %}

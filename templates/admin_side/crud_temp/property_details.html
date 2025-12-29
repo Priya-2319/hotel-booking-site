@@ -1,0 +1,47 @@
+{% extends 'admin_side/index.html' %}
+{% block title %} Property Details - {{ property.property_name }} {% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">
+                <i class="fas fa-home me-2"></i>{{ property.property_name }}
+            </h4>
+            <span class="badge fs-6 
+                {% if property.status == 'Approved' %} bg-success
+                {% elif property.status == 'Pending' %} bg-warning text-dark
+                {% else %} bg-danger {% endif %}">
+                {{ property.status }}
+            </span>
+        </div>
+        <div class="card-body">
+            <p><strong>Property Code:</strong> {{ property.prop_code }}</p>
+            <p><strong>Type:</strong> {{ property.property_type }}</p>
+            <p><strong>Location:</strong> {{ property.city }}, {{ property.state }}, {{ property.country }}</p>
+            <p><strong>Owner:</strong> {{ property.owner.owner_code }} - {{ property.owner.name }}</p>
+            <p><strong>Capacity:</strong> {{ property.guest_capacity }} Guests</p>
+            <p><strong>Size:</strong> {{ property.property_size }} sq ft</p>
+            <p><strong>Created On:</strong> {{ property.created_at.strftime('%Y-%m-%d') }}</p>
+            
+            <div class="mt-4 d-flex justify-content-between">
+                <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+                {% if property.status != 'Approved' %}
+                <a href="{{ url_for('approve_property', prop_code=property.prop_code) }}" 
+                   class="btn btn-success">
+                   <i class="fas fa-check-circle"></i> Approve
+                </a>
+                {% endif %}
+                {% if property.status != 'Deactive' %}
+                <a href="{{ url_for('deactivate_property', prop_code=property.prop_code) }}" 
+                   class="btn btn-danger">
+                   <i class="fas fa-ban"></i> Deactivate
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

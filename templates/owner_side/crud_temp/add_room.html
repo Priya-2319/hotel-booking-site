@@ -1,0 +1,618 @@
+{% extends 'owner_side/index.html' %}
+{% block title %}Add New Property{% endblock %}
+
+{% block content %}
+
+<!-- Add Property Header -->
+<div class="add-property-header bg-light py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="fw-bold mb-3 animate__animated animate__fadeInDown">Add Room Under Property "{{property.property_name}}"</h1>
+                <nav aria-label="breadcrumb" class="animate__animated animate__fadeIn animate__delay-1s">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ url_for('owner_dashboard') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{{ url_for('owner_properties') }}">Properties</a></li>
+                        <li class="breadcrumb-item"><a href="{{ url_for('view_property', property_id=property.id) }}">{{property.property_name}}</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Add Room</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="col-md-4 text-md-end animate__animated animate__fadeIn">
+                <a href="{{ url_for('view_property', property_id=property.id) }}" class="btn btn-outline-secondary px-4 py-2">
+                    <i class="fas fa-arrow-left me-2"></i> Back to Property
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Multi-step Form -->
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0 py-3">
+                    <ul class="nav nav-pills nav-fill flex-nowrap" id="propertyFormTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="basic-tab" data-bs-toggle="pill" data-bs-target="#basic"
+                                type="button" role="tab">
+                                <span class="step-number">1</span>
+                                Basic Info
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="amenities-tab" data-bs-toggle="pill"
+                                data-bs-target="#amenities" type="button" role="tab">
+                                <span class="step-number">2</span>
+                                Amenities
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="photos-tab" data-bs-toggle="pill" data-bs-target="#photos"
+                                type="button" role="tab">
+                                <span class="step-number">3</span>
+                                Photos
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card-body p-4 p-md-5">
+                    <form id="addPropertyForm" action="{{ url_for('add_room', property_id=property.id) }}" method="POST"
+                        enctype="multipart/form-data">
+                        <div class="tab-content" id="propertyFormTabsContent">
+                            <!-- Step 1: Basic Info -->
+                            <div class="tab-pane fade show active" id="basic" role="tabpanel"
+                                aria-labelledby="basic-tab">
+                                <h4 class="mb-4 fw-bold">Basic Information</h4>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="room_number"
+                                                name="room_number" placeholder="Room Number" required>
+                                            <label for="room_number">Room Number*</label>
+                                        </div>
+                                    </div>
+                                    <!-- number of rooms -->
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="number" class="form-control" id="no_of_rooms"
+                                                name="no_of_rooms" placeholder="Number of Rooms" min="1" value="1" required>
+                                            <label for="no_of_rooms">Number of Rooms*</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <select class="form-select" id="room_type" name="room_type" required>
+                                                <option value="" selected disabled>Select room type</option>
+                                                <option value="Deluxe">Deluxe</option>
+                                                <option value="Standard">Standard</option>
+                                                <option value="Suite">Suite</option>
+                                                <option value="Family">Family Room</option>
+                                                <option value="Single">Single room</option>
+                                                <option value="Double">Double</option>
+                                                <option value="other">Other</option>
+                                            </select>
+                                            <label for="room_type">Room Type*</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-floating">
+                                            <textarea class="form-control" placeholder="description"
+                                                id="description" name="description" style="height: 100px" ></textarea>
+                                            <label for="description">Description*</label>
+                                            <small class="text-muted">A brief overview of your property (max 300
+                                                characters)</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="number" class="form-control" id="guestCapacity"
+                                                name="guest_capacity" placeholder="Guest Capacity" min="1" required>
+                                            <label for="guestCapacity">Guest Capacity*</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="number" class="form-control" id="roomSize"
+                                                name="roomSize" placeholder="Room Size" min="0">
+                                            <label for="roomSize">Room Size (sq ft)</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <select class="form-select" id="bed_type" name="bed_type" required>
+                                                <option value="" selected disabled>Select bed type</option>
+                                                <option value="single">single</option>
+                                                <option value="twin">twin</option>
+                                                <option value="double">double</option>
+                                                <option value="queen">queen</option>
+                                                <option value="king">king</option>
+                                                <option value="other">Other</option>
+                                            </select>
+                                            <label for="bed_type">Bed Type*</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="number" class="form-control" id="price_per_night"
+                                                name="price_per_night" placeholder="Price Per Night" min="0" required>
+                                            <label for="price_per_night">Price Per Night*</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-end mt-4">
+                                    <button type="button" class="btn btn-primary next-step" data-next="amenities">Next: Amenities</button>
+                                </div>
+                            </div>
+
+                            <!-- Step 2: Amenities -->
+                            <div class="tab-pane fade" id="amenities" role="tabpanel" aria-labelledby="amenities-tab">
+                                <h4 class="mb-4 fw-bold">Room Amenities</h4>
+                                <p class="text-muted mb-4">Select all amenities that your room offers</p>
+
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <h5 class="fw-bold mb-3"><i class="fas fa-utensils text-primary me-2"></i>
+                                            Kitchen</h5>
+                                        <div class="amenities-checkboxes">
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" id="kitchen"
+                                                    name="amenities[]" value="kitchen">
+                                                <label class="form-check-label" for="kitchen">Full kitchen</label>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" id="microwave"
+                                                    name="amenities[]" value="microwave">
+                                                <label class="form-check-label" for="microwave">Microwave</label>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" id="refrigerator"
+                                                    name="amenities[]" value="refrigerator">
+                                                <label class="form-check-label" for="refrigerator">Refrigerator</label>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" id="coffeeMaker"
+                                                    name="amenities[]" value="coffee_maker">
+                                                <label class="form-check-label" for="coffeeMaker">Coffee maker</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <h5 class="fw-bold mb-3"><i class="fas fa-wifi text-primary me-2"></i>
+                                            Technology</h5>
+                                        <div class="amenities-checkboxes">
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" id="wifi"
+                                                    name="amenities[]" value="wifi">
+                                                <label class="form-check-label" for="wifi">WiFi</label>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" id="tv"
+                                                    name="amenities[]" value="tv">
+                                                <label class="form-check-label" for="tv">TV</label>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" id="airConditioning"
+                                                    name="amenities[]" value="air_conditioning">
+                                                <label class="form-check-label" for="airConditioning">Air
+                                                    conditioning</label>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" id="heating"
+                                                    name="amenities[]" value="heating">
+                                                <label class="form-check-label" for="heating">Heating</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <h5 class="fw-bold mb-3"><i class="fas fa-swimming-pool text-primary me-2"></i>
+                                            Facilities</h5>
+                                        <div class="amenities-checkboxes">
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" id="pool"
+                                                    name="amenities[]" value="pool">
+                                                <label class="form-check-label" for="pool">Swimming pool</label>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" id="gym"
+                                                    name="amenities[]" value="gym">
+                                                <label class="form-check-label" for="gym">Gym</label>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" id="parking"
+                                                    name="amenities[]" value="parking">
+                                                <label class="form-check-label" for="parking">Free parking</label>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" id="elevator"
+                                                    name="amenities[]" value="elevator">
+                                                <label class="form-check-label" for="elevator">Elevator</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <h5 class="fw-bold mb-3"><i class="fas fa-broom text-primary me-2"></i> Services
+                                        </h5>
+                                        <div class="amenities-checkboxes">
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" id="cleaning"
+                                                    name="amenities[]" value="cleaning">
+                                                <label class="form-check-label" for="cleaning">Cleaning service</label>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" id="linens"
+                                                    name="amenities[]" value="linens">
+                                                <label class="form-check-label" for="linens">Linens provided</label>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" id="towels"
+                                                    name="amenities[]" value="towels">
+                                                <label class="form-check-label" for="towels">Towels provided</label>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" id="security"
+                                                    name="amenities[]" value="security">
+                                                <label class="form-check-label" for="security">24/7 Security</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <textarea class="form-control" placeholder="Additional amenities"
+                                                id="amenities[]" name="amenities[]"
+                                                style="height: 100px"></textarea>
+                                            <label for="amenities[]">Additional Amenities</label>
+                                            <small class="text-muted">List any other amenities not included
+                                                above</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between mt-4">
+                                    <button type="button" class="btn btn-secondary prev-step"
+                                        data-prev="basic">Previous</button>
+                                    <button type="button" class="btn btn-primary next-step" data-next="photos">Next: Photos</button>
+                                </div>
+                            </div>
+
+                            <!-- Step 3: Photos -->
+                            <div class="tab-pane fade" id="photos" role="tabpanel" aria-labelledby="photos-tab">
+                                <h4 class="mb-4 fw-bold">Room Photos</h4>
+                                <p class="text-muted mb-4">Upload high-quality photos of your room. First image will
+                                    be used as the main photo.</p>
+
+                                <div class="photo-upload-container mb-4">
+                                    <div class="dropzone p-5 text-center border rounded-3" id="photoDropzone">
+                                        <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                                        <h5>Drag & Drop Photos Here</h5>
+                                        <p class="text-muted">or click to browse files</p>
+                                        <input type="file" id="roomPhotos" name="roomPhotos[]" multiple
+                                            accept="image/*" style="display: none;">
+                                        <button type="button" class="btn btn-outline-primary mt-2"
+                                            id="browsePhotosBtn">Browse Files</button>
+                                    </div>
+                                </div>
+
+                                <div class="photo-preview-container">
+                                    <div class="row g-3" id="photoPreviewGrid">
+                                        <!-- Preview images will appear here -->
+                                        <div class="col-12 text-center py-4" id="noPhotosMessage">
+                                            <i class="fas fa-images fa-2x text-muted mb-3"></i>
+                                            <p class="text-muted">No photos uploaded yet</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between mt-4">
+                                    <button type="button" class="btn btn-secondary prev-step"
+                                        data-prev="amenities">Previous</button>
+                                    <button type="submit" class="btn btn-success px-4">
+                                        <i class="fas fa-check-circle me-2"></i> Submit Room
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Header Styles */
+    .add-property-header {
+        background: linear-gradient(rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.95)),
+            url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+        background-size: cover;
+        background-position: center;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    /* Form Navigation Tabs */
+    .nav-pills .nav-link {
+        position: relative;
+        padding: 1rem 1.5rem;
+        color: #6c757d;
+        border-radius: 0;
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s ease;
+    }
+
+    .nav-pills .nav-link.active {
+        color: #1e3c72;
+        background-color: transparent;
+        border-bottom: 3px solid #1e3c72;
+        font-weight: 600;
+    }
+
+    .step-number {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        line-height: 24px;
+        text-align: center;
+        background-color: #6c757d;
+        color: white;
+        border-radius: 50%;
+        margin-right: 8px;
+        font-size: 0.8rem;
+    }
+
+    .nav-pills .nav-link.active .step-number {
+        background-color: #1e3c72;
+    }
+
+    /* Form Styles */
+    .form-floating textarea {
+        min-height: 100px;
+    }
+
+    /* Photo Upload */
+    .photo-upload-container {
+        position: relative;
+    }
+
+    .dropzone {
+        background-color: #f8f9fa;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .dropzone:hover {
+        background-color: #e9ecef;
+        border-color: #dee2e6;
+    }
+
+    .dropzone.dragover {
+        background-color: #e7f1ff;
+        border-color: #86b7fe;
+    }
+
+    /* Photo Preview */
+    .photo-preview {
+        position: relative;
+        border-radius: 8px;
+        overflow: hidden;
+        height: 150px;
+    }
+
+    .photo-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .photo-actions {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .photo-preview:hover .photo-actions {
+        opacity: 1;
+    }
+
+    /* Amenities Checkboxes */
+    .amenities-checkboxes {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        .add-property-header {
+            text-align: center;
+        }
+
+        .add-property-header .btn {
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        .nav-pills {
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .nav-pills .nav-link {
+            white-space: nowrap;
+            font-size: 0.8rem;
+            padding: 0.75rem;
+        }
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Step navigation
+    document.querySelectorAll('.next-step').forEach(button => {
+        button.addEventListener('click', function () {
+            const nextTab = document.querySelector(`#${this.dataset.next}-tab`);
+            const tab = new bootstrap.Tab(nextTab);
+            tab.show();
+            
+            // Scroll to top of form
+            document.querySelector('.card-body').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            
+            // Validate current step before proceeding
+            if (this.dataset.next === 'amenities') {
+                if (!validateBasicInfo()) {
+                    return false;
+                }
+            }
+        });
+    });
+
+    document.querySelectorAll('.prev-step').forEach(button => {
+        button.addEventListener('click', function () {
+            const prevTab = document.querySelector(`#${this.dataset.prev}-tab`);
+            const tab = new bootstrap.Tab(prevTab);
+            tab.show();
+            
+            // Scroll to top of form
+            document.querySelector('.card-body').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+
+    function validateBasicInfo() {
+        let isValid = true;
+        const requiredFields = [
+            'room_number', 'room_type', 'description', 
+            'guest_capacity', 'bed_type', 'price_per_night'
+        ];
+        
+        requiredFields.forEach(field => {
+            const element = document.querySelector(`[name="${field}"]`);
+            if (!element.value) {
+                element.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                element.classList.remove('is-invalid');
+            }
+        });
+        
+        return isValid;
+    }
+
+    // Photo Upload
+    const dropzone = document.getElementById('photoDropzone');
+    const fileInput = document.getElementById('roomPhotos');
+    const browseBtn = document.getElementById('browsePhotosBtn');
+    const previewGrid = document.getElementById('photoPreviewGrid');
+    const noPhotosMessage = document.getElementById('noPhotosMessage');
+
+    // Drag & Drop prevention
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropzone.addEventListener(eventName, e => {
+            e.preventDefault();
+            e.stopPropagation();
+        }, false);
+    });
+
+    ['dragenter', 'dragover'].forEach(event => {
+        dropzone.addEventListener(event, () => dropzone.classList.add('dragover'));
+    });
+
+    ['dragleave', 'drop'].forEach(event => {
+        dropzone.addEventListener(event, () => dropzone.classList.remove('dragover'));
+    });
+
+    // Handle drop
+    dropzone.addEventListener('drop', function (e) {
+        handleFiles(e.dataTransfer.files);
+    });
+
+    // File browse button
+    browseBtn.addEventListener('click', () => fileInput.click());
+
+    // File input
+    fileInput.addEventListener('change', function () {
+        handleFiles(this.files);
+    });
+
+    function handleFiles(files) {
+        if (!files.length) return;
+
+        noPhotosMessage.style.display = 'none';
+
+        Array.from(files).forEach(file => {
+            if (!file.type.startsWith('image/')) return;
+
+            const reader = new FileReader();
+            reader.onload = e => {
+                const col = document.createElement('div');
+                col.className = 'col-6 col-md-4 col-lg-3 mb-3';
+
+                col.innerHTML = `
+                    <div class="card shadow-sm position-relative">
+                        <img src="${e.target.result}" class="card-img-top rounded" alt="Preview">
+                        <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1 rounded-circle delete-photo-btn" aria-label="Delete photo">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>`;
+
+                previewGrid.appendChild(col);
+
+                // Delete button
+                col.querySelector('.delete-photo-btn').addEventListener('click', () => {
+                    col.remove();
+                    if (!previewGrid.querySelector('.col-6, .col-md-4, .col-lg-3')) {
+                        noPhotosMessage.style.display = 'block';
+                    }
+                });
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // Form validation
+    const form = document.getElementById('addPropertyForm');
+    if (form) {
+        form.addEventListener('submit', function (e) {
+            if (!validateBasicInfo()) {
+                e.preventDefault();
+                // Show first tab if validation fails
+                const basicTab = document.querySelector('#basic-tab');
+                new bootstrap.Tab(basicTab).show();
+                return false;
+            }
+            
+            // Additional validation for photos if needed
+            if (!fileInput.files.length) {
+                if (!confirm('You haven\'t uploaded any photos. Continue without photos?')) {
+                    e.preventDefault();
+                    const photosTab = document.querySelector('#photos-tab');
+                    new bootstrap.Tab(photosTab).show();
+                    return false;
+                }
+            }
+        });
+    }
+
+    // Animate on scroll
+    const animateOnScroll = () => {
+        document.querySelectorAll('.animate__animated').forEach(el => {
+            const top = el.getBoundingClientRect().top;
+            if (top < window.innerHeight * 0.85) {
+                el.style.opacity = '1';
+            }
+        });
+    };
+
+    document.querySelectorAll('.animate__animated').forEach(el => el.style.opacity = '0');
+    animateOnScroll();
+    window.addEventListener('scroll', animateOnScroll);
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Support Requests - LuxStay</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .bg-gradient-primary {
+            background: linear-gradient(87.4deg, #4e54c8 0%, #8f94fb 100%) !important;
+        }
+        .bg-gradient-info {
+            background: linear-gradient(87.4deg, #36d1dc 0%, #5b86e5 100%) !important;
+        }
+        .table td, .table th {
+            padding: 1rem;
+        }
+        .btn {
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        .modal-content {
+            border-radius: 16px;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+<div class="container py-5">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-gradient-primary shadow-lg border-0 rounded-4">
+                <div class="card-body text-center text-white p-4">
+                    <h2 class="mb-1"><i class="fas fa-history me-2"></i>My Support Requests</h2>
+                    <p class="mb-0 opacity-75">
+                        Here you can track all your previous support tickets and their resolutions.
+                    </p>
+                    <span class="badge bg-light text-primary mt-2 shadow-sm">
+                        Last Updated: {{ today_date }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if support_requests %}
+    <!-- Requests Table -->
+    <div class="card shadow border-0 rounded-4">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="px-3">#</th>
+                            <th>Message Code</th>
+                            <th>Subject</th>
+                            <th>Status</th>
+                            <th>Created</th>
+                            <th>Resolution</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for req in support_requests %}
+                        <tr>
+                            <td class="px-3">{{ loop.index }}</td>
+                            <td><span class="fw-bold text-primary">{{ req.message_code }}</span></td>
+                            <td>{{ req.subject }}</td>
+                            <td>
+                                {% if req.status == 'Pending' %}
+                                    <span class="badge bg-warning text-dark">{{ req.status }}</span>
+                                {% elif req.status == 'In Progress' %}
+                                    <span class="badge bg-info text-white">{{ req.status }}</span>
+                                {% else %}
+                                    <span class="badge bg-success">{{ req.status }}</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ req.created_at.strftime('%d %b %Y, %I:%M %p') }}</td>
+                            <td>
+                                {% if req.resolution %}
+                                    <span class="text-success">Resolved</span>
+                                {% else %}
+                                    <span class="text-muted">Awaiting...</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#reqModal{{ req.id }}">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="reqModal{{ req.id }}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-lg modal-dialog-centered">
+                                <div class="modal-content rounded-4 shadow">
+                                    <div class="modal-header bg-gradient-info text-white">
+                                        <h5 class="modal-title"><i class="fas fa-ticket-alt me-2"></i>Request Details</h5>
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p><strong>Message Code:</strong> {{ req.message_code }}</p>
+                                        <p><strong>Subject:</strong> {{ req.subject }}</p>
+                                        <p><strong>Message:</strong> {{ req.message }}</p>
+                                        <p><strong>Status:</strong> {{ req.status }}</p>
+                                        <p><strong>Created At:</strong> {{ req.created_at.strftime('%d %B %Y, %I:%M %p') }}</p>
+                                        {% if req.resolution %}
+                                            <hr>
+                                            <h6 class="text-success"><i class="fas fa-check-circle me-2"></i>Resolution</h6>
+                                            <p>{{ req.resolution }}</p>
+                                            <p><strong>Resolved At:</strong> {{ req.resolved_at.strftime('%d %B %Y, %I:%M %p') if req.resolved_at }}</p>
+                                        {% else %}
+                                            <p class="text-muted">Resolution not yet provided.</p>
+                                        {% endif %}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <!-- No Requests -->
+    <div class="card shadow border-0 rounded-4 text-center p-5">
+        <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+        <h5 class="text-muted">No Support Requests Found</h5>
+        <p class="text-muted">You haven't submitted any support requests yet.</p>
+    </div>
+    {% endif %}
+
+    <!-- Back -->
+    <div class="text-center mt-4">
+        <a href="{{ url_for('help_and_support') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Back to Help & Support
+        </a>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

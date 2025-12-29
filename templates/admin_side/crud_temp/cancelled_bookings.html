@@ -1,0 +1,67 @@
+{% extends 'admin_side/index.html' %}
+{% block title %}
+    Cancelled Bookings List
+{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mx-5 bg-warning rounded mt-4 mb-4">   
+        <span class="px-4 text-primary">Cancelled and Completed Bookings On LuxStay</span>
+        <h4 class="text-center mx-5">Cancelled and Completed Bookings List</h4>
+        <span class="px-4">Last Updated : {{ today_date }}</span>
+    </div>
+    
+    {% if bookings %}
+        <div class="container">
+            <table class="table table-bordered table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">S.No.</th>
+                        <th scope="col">Booking ID</th>
+                        <th scope="col">Property Code</th>
+                        <th scope="col">Property Name</th>
+                        <th scope="col">Guest Name</th>
+                        <th scope="col">Guest Email</th>
+                        <th scope="col">Check-In</th>
+                        <th scope="col">Check-Out</th>
+                        <th scope="col">Total Amount</th>
+                        <th scope="col">Booking Date</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in bookings %}
+                    <tr>
+                        <th scope="row">{{ loop.index }}</th>
+                        <td>{{ booking.booking_code }}</td>
+                        <td>{{ booking.property.prop_code }}</td>
+                        <td>{{ booking.property.property_name }}</td>
+                        <td>{{ booking.user.name }}</td>
+                        <td>{{ booking.user.email }}</td>
+                        <td>{{ booking.start_date.strftime('%Y-%m-%d') }}</td>
+                        <td>{{ booking.end_date.strftime('%Y-%m-%d') }}</td>
+                        <td>₹{{ '%.2f'|format(booking.room.price_per_night) }}</td>
+                        <td>{{ booking.booking_date.strftime('%Y-%m-%d') }}</td>
+                        {% if booking.status == 'Completed' %}
+                            <td><span class="badge bg-success">Completed</span></td>
+                        {% elif booking.status == 'Cancelled' %}
+                            <td><span class="badge bg-danger">Cancelled</span></td>
+                        {% else %}
+                            <td><span class="badge bg-secondary">{{ booking.status }}</span></td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="container">
+            <div class="alert alert-info text-center" role="alert">
+                No cancelled bookings found.
+            </div>
+        </div>
+    {% endif %}
+
+    <!-- go to dashboard -->
+    <div class="container mb-4 text-center">
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary text-warning"><i class="bi bi-house-door-fill"></i> Back to Dashboard</a>
+{% endblock %}

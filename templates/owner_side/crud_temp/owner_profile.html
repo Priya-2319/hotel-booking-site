@@ -1,0 +1,149 @@
+{% extends 'owner_side/index.html' %}
+{% block title %}Owner Profile - LuxStay{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Profile Card -->
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow border-0 rounded-4">
+                <div class="card-body p-4">
+                    <div class="d-flex flex-column flex-md-row align-items-center text-center text-md-start">
+                        <div class="me-md-4 mb-3 mb-md-0">
+                            <img src="{{ url_for('static', filename='profiles_pictures/owner_profile_pic/' + owner.profile_picture) if owner.profile_picture else url_for('static', filename='images/admin_avtar.jpg') }}"
+                                 alt="Profile Picture" 
+                                 class="rounded-circle border border-dark shadow" width="150" height="150" style="object-fit: cover;">
+                        </div>
+                        <div>
+                            <h3 class="mb-0">{{ owner.name }}</h3>
+                            <p class="text-muted mb-1">Owner Code: <strong>{{ owner.owner_code }}</strong></p>
+                            <p class="text-muted mb-2">Joined: {{ owner.created_at.strftime('%B %d, %Y') }}</p>
+                            <hr class="my-2">
+                            <p class="text-muted mb-2"><i class="fas fa-envelope me-2 text-primary"></i>{{ owner.email }}</p>
+                            <p class="text-muted mb-2"><i class="fas fa-phone me-2 text-success"></i>{{ owner.phone }}</p>
+                            <p class="text-muted mb-2"><i class="fas fa-map-marker-alt me-2 text-danger"></i>{{ owner.address }}</p>
+                            
+                            <!-- Toggle Edit Button -->
+                            <button id="toggleEditBtn" class="btn btn-primary mt-2" 
+                                    data-bs-toggle="collapse" 
+                                    data-bs-target="#editProfileForm" 
+                                    aria-expanded="false">
+                                <i class="fas fa-edit me-2"></i><span>Edit Profile</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Edit Profile Form -->
+            <div class="collapse mt-4" id="editProfileForm">
+                <div class="card shadow border-0 rounded-4">
+                    <div class="card-header bg-gradient-primary text-white rounded-top">
+                        <h5 class="mb-0"><i class="fas fa-user-cog me-2"></i>Edit Profile</h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" enctype="multipart/form-data">
+                            <div class="row">
+                                <!-- Name -->
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" name="name" value="{{ owner.name }}" required>
+                                </div>
+                                <!-- Email -->
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" name="email" value="{{ owner.email }}" required>
+                                </div>
+                                <!-- Phone -->
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Phone</label>
+                                    <input type="text" class="form-control" name="phone" value="{{ owner.phone }}">
+                                </div>
+                                <!-- DOB -->
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Date of Birth</label>
+                                    <input type="date" class="form-control" name="dob" value="{{ owner.dob.strftime('%Y-%m-%d') if owner.dob }}">
+                                </div>
+                                <!-- Address -->
+                                <div class="col-md-12 mb-3">
+                                    <label class="form-label">Address</label>
+                                    <textarea class="form-control" name="address" rows="2">{{ owner.address }}</textarea>
+                                </div>
+                                <!-- ID Type -->
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label" for="id_type">ID Type</label>
+                                    <select name="id_type" id="id_type" class="form-control">
+                                        <option value="" disabled {% if not owner.id_type %}selected{% endif %}>
+                                            Select ID Type
+                                        </option>
+                                        <option value="Passport" {% if owner.id_type == 'Passport' %}selected{% endif %}>Passport</option>
+                                        <option value="Driver's License" {% if owner.id_type == "Driver's License" %}selected{% endif %}>Driver's License</option>
+                                        <option value="Voter ID" {% if owner.id_type == 'Voter ID' %}selected{% endif %}>Voter ID</option>
+                                        <option value="Aadhar" {% if owner.id_type == 'Aadhar' %}selected{% endif %}>Aadhar</option>
+                                        <option value="PAN Card" {% if owner.id_type == 'PAN Card' %}selected{% endif %}>PAN Card</option>
+                                        <option value="Other" {% if owner.id_type == 'Other' %}selected{% endif %}>Other</option>
+                                    </select>
+                                </div>
+                                <!-- ID Number -->
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">ID Number</label>
+                                    <input type="text" class="form-control" name="id_number" value="{{ owner.id_number }}">
+                                </div>
+                                <!-- Profile Pic -->
+                                <div class="col-md-12 mb-3">
+                                    <label class="form-label">Profile Picture</label>
+                                    <input type="file" class="form-control" name="profile_pic" accept="image/*">
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end gap-2">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-save me-2"></i>Save Changes
+                                </button>
+                                <button type="button" class="btn btn-secondary" data-bs-toggle="collapse" data-bs-target="#editProfileForm">
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Back -->
+            <div class="text-center mt-4">
+                <a href="{{ url_for('owner_dashboard') }}" class="btn bg-gradient-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-gradient-primary {
+        background: linear-gradient(87.4deg, #4e54c8 0%, #8f94fb 100%) !important;
+    }
+    .btn {
+        border-radius: 8px;
+        font-weight: 500;
+    }
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const toggleBtn = document.getElementById("toggleEditBtn");
+    const collapse = document.getElementById("editProfileForm");
+    const btnText = toggleBtn.querySelector("span");
+    const btnIcon = toggleBtn.querySelector("i");
+
+    collapse.addEventListener("show.bs.collapse", () => {
+        btnText.textContent = "Close Edit";
+        btnIcon.className = "fas fa-times me-2";
+    });
+
+    collapse.addEventListener("hide.bs.collapse", () => {
+        btnText.textContent = "Edit Profile";
+        btnIcon.className = "fas fa-edit me-2";
+    });
+});
+</script>
+{% endblock %}

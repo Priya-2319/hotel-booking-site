@@ -1,0 +1,524 @@
+<style>
+    /* Previous styles remain the same until .nav-buttons */
+    :root {
+        --gold: #D4AF37;
+        --dark-blue: #0f1259;
+        --light-gold: #F4E5C2;
+        --cream: #FFF9F0;
+        --shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    body {
+        background-color: var(--cream);
+    }
+
+    .luxstay-navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 5%;
+        height: 80px;
+        background: linear-gradient(135deg, rgba(36, 56, 158, 0.98), rgba(17, 113, 52, 0.92));
+        backdrop-filter: blur(10px);
+        box-shadow: var(--shadow);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+    }
+
+    .logo-container {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .logo-text {
+        color: var(--gold);
+        font-size: 1.8rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        background: linear-gradient(to right, var(--gold), var(--light-gold));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: shine 3s infinite;
+    }
+
+    .logo-icon {
+        font-size: 2rem;
+        color: var(--gold);
+        transform: rotate(-15deg);
+        transition: transform 0.3s ease;
+    }
+
+    .logo-container:hover .logo-icon {
+        transform: rotate(0deg);
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+    }
+
+    .nav-links a {
+        color: var(--cream);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.95rem;
+        letter-spacing: 0.5px;
+        padding: 0.5rem 0;
+        position: relative;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+    }
+
+    .nav-links a:after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: 0;
+        left: 0;
+        background-color: var(--gold);
+        transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover:after {
+        width: 100%;
+    }
+
+    .nav-links a:hover {
+        color: var(--gold);
+    }
+
+    .nav-buttons {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        position: relative;
+    }
+
+    /* Notification Button Styles */
+    .notification-wrapper {
+        position: relative;
+    }
+
+    .notification-bell {
+        position: relative;
+        color: var(--cream);
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        padding: 8px;
+        border-radius: 50%;
+    }
+
+    .notification-bell:hover {
+        color: var(--gold);
+        background: rgba(212, 175, 55, 0.1);
+        transform: scale(1.1);
+    }
+
+    .notification-badge {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background-color: #E74C3C;
+        color: white;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.6rem;
+        font-weight: bold;
+    }
+
+    /* Notification Dropdown */
+    .notification-dropdown {
+        position: absolute;
+        top: 50px;
+        right: 0;
+        width: 350px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        z-index: 1000;
+        display: none;
+        transform: translateY(-10px);
+        opacity: 0;
+        transition: all 0.3s ease;
+    }
+
+    .notification-dropdown.active {
+        display: block;
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    .notification-header {
+        padding: 15px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .notification-title {
+        font-weight: 600;
+        color: var(--dark-blue);
+    }
+
+    .mark-all-read {
+        color: var(--gold);
+        font-size: 0.8rem;
+        cursor: pointer;
+    }
+
+    .notification-list {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    .notification-item {
+        padding: 15px;
+        border-bottom: 1px solid #f5f5f5;
+        display: flex;
+        gap: 10px;
+        transition: background 0.2s ease;
+    }
+
+    .notification-item:hover {
+        background: #f8f9fa;
+        transform: translateY(-2px);
+    }
+    .notification-item.unread {
+        background: rgba(212, 175, 55, 0.05);
+    }
+
+    .notification-icon {
+        color: var(--gold);
+        font-size: 1.2rem;
+    }
+
+    .notification-content {
+        flex: 1;
+    }
+
+    .notification-message {
+        font-size: 0.9rem;
+        color: var(--dark-blue);
+        margin-bottom: 5px;
+    }
+
+    .notification-time {
+        font-size: 0.75rem;
+        color: #999;
+    }
+
+    /* User Profile Dropdown */
+    .user-profile {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        position: relative;
+        padding: 5px 10px;
+        border-radius: 30px;
+        transition: all 0.3s ease;
+    }
+
+    .user-profile:hover {
+        background: rgba(212, 175, 55, 0.1);
+    }
+
+    .profile-img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid var(--gold);
+        transition: transform 0.3s ease;
+    }
+
+    .profile-name {
+        background-color: #D4AF37;
+        border-radius: 5px;
+        color: black;
+        text-align: center;
+        padding: 5px 10px;
+        font-weight: 600;
+    }
+
+    .dropdown-arrow {
+        color: var(--cream);
+        font-size: 0.8rem;
+        transition: transform 0.3s ease;
+    }
+
+    .user-profile.active .dropdown-arrow {
+        transform: rotate(180deg);
+    }
+
+    .profile-dropdown {
+        position: absolute;
+        top: 50px;
+        right: 0;
+        width: 150px;
+        background: rgb(137, 61, 137);
+        border-radius: 8px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        z-index: 1000;
+        display: none;
+        transform: translateY(-10px);
+        opacity: 0;
+        transition: all 0.3s ease;
+
+    }
+
+    .profile-dropdown.active {
+        display: block;
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    .dropdown-item {
+        padding: 12px 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: yellowgreen;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+        border-bottom: 1px solid #f5f5f5;
+        border-radius: 7px;
+    }
+
+    .dropdown-item:last-child {
+        border-bottom: none;
+    }
+
+    .dropdown-item:hover {
+        background: #f9f9f9;
+        color: black;
+        padding-left: 20px;
+    }
+
+    .dark .dropdown-item:hover i {
+    color: black;
+    }
+
+    .dropdown-item i {
+        width: 20px;
+        text-align: center;
+    }
+
+    /* Theme Toggle Button */
+    .theme-toggle-btn {
+        background: none;
+        border: none;
+        font-size: 1.2rem;
+        cursor: pointer;
+        color: inherit;
+        margin-right: 10px;
+    }
+
+    body.dark-theme {
+        background-color: #121212;
+        color: #ffffff;
+    }
+</style>
+
+<nav class="luxstay-navbar">
+    <div class="logo-container">
+        <i class="fas fa-hotel logo-icon"></i>
+        <span class="logo-text">LuxStay</span>
+    </div>
+
+    <ul class="nav-links">
+        <li><a href="{{ url_for('user_dashboard') }}">Welcome</a></li>
+        <li><a href="{{ url_for('my_bookings') }}">My Bookings</a></li>
+        <li><a href="{{ url_for('top_destinations') }}">Top Destinations</a></li>
+        <li><a href="{{ url_for('reviews') }}">Reviews</a></li>
+    </ul>
+
+    <div class="nav-buttons">
+        <div>
+            <!-- Theme Toggle -->
+            <button id="themeToggleBtn" class="theme-toggle-btn">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+        <!-- Notification Button with Dropdown -->
+        <div class="notification-wrapper">
+            <div class="notification-bell" id="notificationBell">
+                <i class="fas fa-bell"></i>
+                {% if unread_count > 0 %}
+                <span class="notification-badge">{{ unread_count }}</span>
+                {% endif %}
+            </div>
+        
+            <div class="notification-dropdown" id="notificationDropdown">
+                <div class="notification-header">
+                    <span class="notification-title">Notifications</span>
+                    {% if user_notifications %}
+                    <a href="{{ url_for('mark_all_read') }}" class="mark-all-read">Mark all as read</a>
+                    {% endif %}
+                </div>
+                <div class="notification-list">
+                    {% if user_notifications %}
+                    {% for note in user_notifications %}
+                    <div class="notification-item d-flex align-items-start p-3 mb-2 rounded shadow-sm 
+                                    {% if not note.is_read %}bg-light border-start border-4 border-primary{% else %}bg-white{% endif %}"
+                        style="transition: all 0.2s ease; cursor: pointer;">
+                
+                        <!-- Dynamic icon by type -->
+                        <div class="me-3 fs-5 text-primary">
+                            {% if note.type == "success" %}
+                            <i class="fas fa-check-circle text-success"></i>
+                            {% elif note.type == "warning" %}
+                            <i class="fas fa-exclamation-triangle text-warning"></i>
+                            {% elif note.type == "error" %}
+                            <i class="fas fa-times-circle text-danger"></i>
+                            {% else %}
+                            <i class="fas fa-bell text-primary"></i>
+                            {% endif %}
+                        </div>
+                
+                        <!-- Content -->
+                        <div class="flex-grow-1">
+                            <div class="fw-semibold">{{ note.title }}</div>
+                            <div class="text-muted small">{{ note.message }}</div>
+                            <div class="text-muted small fst-italic">{{ note.created_at.strftime('%b %d, %I:%M %p') }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                
+                    <!-- View all notifications -->
+                    <div class="text-center mt-3 mb-1">
+                        <a href="{{ url_for('view_user_notifications') }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                            <i class="fas fa-list me-1"></i> View all notifications
+                        </a>
+                    </div>
+                
+                    {% else %}
+                    <div class="notification-item p-3 text-center text-muted">
+                        <i class="fas fa-bell-slash fa-2x mb-2"></i>
+                        <div>No notifications</div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+
+        <!-- User Profile with Dropdown -->
+        <div class="user-profile" id="userProfile">
+            <img src="https://ui-avatars.com/api/?name={{ user_name }}&background=0D8ABC&color=fff&size=128"
+                alt="{{ user_name }}" class="profile-img ">
+
+            <i class="fas fa-chevron-down dropdown-arrow"></i>
+
+            <div class="profile-dropdown" id="profileDropdown">
+                <div class="profile-name">
+                    <span>{{ user_name }}</span>
+                </div>
+
+                <a href="{{ url_for('user_profile') }}" class="dropdown-item">
+                    <i class="fas fa-user"></i> My Profile
+                </a>
+                <a href="{{ url_for('help_and_support')}}" class="dropdown-item">
+                    <i class="fas fa-question-circle"></i> Help & Support
+                </a>
+
+                <a href="#" class="dropdown-item">
+                    <i class="fas fa-credit-card"></i> Pay Here
+                </a>
+
+                <a href="{{ url_for('logout') }}" class="dropdown-item bg-danger">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<script>
+    // Toggle notification dropdown
+    const notificationBell = document.getElementById('notificationBell');
+    const notificationDropdown = document.getElementById('notificationDropdown');
+
+    notificationBell.addEventListener('click', function (e) {
+        e.stopPropagation();
+        notificationDropdown.classList.toggle('active');
+
+        // Close profile dropdown if open
+        profileDropdown.classList.remove('active');
+        userProfile.classList.remove('active');
+    });
+
+    // Toggle profile dropdown
+    const userProfile = document.getElementById('userProfile');
+    const profileDropdown = document.getElementById('profileDropdown');
+
+    userProfile.addEventListener('click', function (e) {
+        e.stopPropagation();
+        profileDropdown.classList.toggle('active');
+        userProfile.classList.toggle('active');
+
+        // Close notification dropdown if open
+        notificationDropdown.classList.remove('active');
+    });
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function () {
+        notificationDropdown.classList.remove('active');
+        profileDropdown.classList.remove('active');
+        userProfile.classList.remove('active');
+    });
+
+    // Prevent dropdown from closing when clicking inside
+    notificationDropdown.addEventListener('click', function (e) {
+        e.stopPropagation();
+    });
+
+    profileDropdown.addEventListener('click', function (e) {
+        e.stopPropagation();
+    });
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const themeToggleBtn = document.getElementById("themeToggleBtn");
+        const body = document.body;
+
+        // Load saved theme
+        if (localStorage.getItem("theme") === "dark") {
+            body.classList.add("dark-theme");
+            themeToggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+
+        // Toggle on click
+        themeToggleBtn.addEventListener("click", () => {
+            body.classList.toggle("dark-theme");
+
+            if (body.classList.contains("dark-theme")) {
+                localStorage.setItem("theme", "dark");
+                themeToggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                localStorage.setItem("theme", "light");
+                themeToggleBtn.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+        });
+    });
+</script>

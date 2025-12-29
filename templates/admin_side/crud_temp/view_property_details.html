@@ -1,0 +1,159 @@
+{% extends 'admin_side/index.html' %}
+
+{% block title %}
+    Property Details - {{ property.property_name }}
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <!-- Property Hero -->
+    <div class="property-hero mb-4 rounded-3 shadow-lg" 
+         style="height: 280px; background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), 
+                url('{{ url_for('static', filename=property.property_photos.split(',')[0].replace('static/', '').strip()) if property.property_photos else 'images/property-default.jpg' }}'); 
+                background-size: cover; background-position: center;">
+        <div class="h-100 d-flex flex-column justify-content-center align-items-center text-white">
+            <h2 class="fw-bold">{{ property.property_name }}</h2>
+            <p class="mb-0"><i class="bi bi-geo-alt me-2"></i>{{ property.city }}, {{ property.state }}</p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- Carousel & Basic Info -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 h-100">
+                {% if property.property_photos %}
+                {% set photos = property.property_photos.split(',') %}
+                <div id="propertyCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        {% for photo in photos %}
+                        <div class="carousel-item {% if loop.first %}active{% endif %}">
+                            <img src="{{ url_for('static', filename=photo.replace('static/', '').strip()) }}"
+                                class="d-block w-100 rounded-top" alt="Property Image" 
+                                style="height: 350px; object-fit: cover;">
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#propertyCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#propertyCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon"></span>
+                    </button>
+                </div>
+                {% else %}
+                <img src="https://via.placeholder.com/600x400?text=No+Image" class="d-block w-100 rounded-top" alt="No Image">
+                {% endif %}
+
+                <div class="card-body">
+                    <h4 class="fw-bold text-primary">{{ property.property_name }}</h4>
+                    <p class="text-muted"><i class="bi bi-building me-1"></i> {{ property.property_type }}</p>
+                    {% if property.status == "Approved" %}
+                    <span class="badge bg-success text-white">{{ property.status }}</span>
+                    {% else %}
+                    <span class="badge bg-warning text-dark">{{ property.status }}</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Details -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h5 class="fw-bold text-secondary mb-3">Property Information</h5>
+                    <ul class="list-unstyled">
+                        <!-- proprty code -->
+                        <li><i class="bi bi-code-slash me-2"></i> Property Code: <strong>{{ property.prop_code }}</strong></li>
+                        <li><i class="bi bi-people-fill me-2"></i> Guest Capacity: <strong>{{ property.guest_capacity }}</strong></li>
+                        <li><i class="bi bi-door-open me-2"></i> Bedrooms: <strong>{{ property.bedroom_count }}</strong></li>
+                        <li><i class="bi bi-droplet-fill me-2"></i> Bathrooms: <strong>{{ property.bathroom_count }}</strong></li>
+                        <li><i class="bi bi-aspect-ratio me-2"></i> Size: <strong>{{ property.property_size }} sq ft</strong></li>
+                    </ul>
+
+                    <h5 class="fw-bold text-secondary mt-4 mb-3">Address</h5>
+                    <p><i class="bi bi-geo-alt-fill me-2"></i>{{ property.street_address }}, {{ property.city }}, {{ property.state }} - {{ property.zip_code }}, {{ property.country }}</p>
+
+                    <h5 class="fw-bold text-secondary mt-4 mb-3">Owner</h5>
+                    
+                    <div class="row">
+                        <!-- Left Column -->
+                        <div class="col-md-6">
+                            <p><i class="bi bi-code-slash me-2"></i> Owner Code:
+                                <strong>{{ property.owner.owner_code }}</strong>
+                            </p>
+                            <p><i class="bi bi-person-circle me-2"></i>{{ property.owner.name }}</p>
+                        </div>
+                    
+                        <!-- Right Column -->
+                        <div class="col-md-6">
+                            <p><i class="bi bi-envelope-fill me-2"></i>{{ property.owner.email }}</p>
+                            <p><i class="bi bi-phone-fill me-2"></i>{{ property.owner.phone }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Amenities & Nearby -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h5 class="fw-bold text-secondary mb-3">Amenities</h5>
+                    {% if property.amenities %}
+                        <p>{{ property.amenities }}</p>
+                    {% else %}
+                        <p class="text-muted">No amenities listed.</p>
+                    {% endif %}
+
+                    <h6 class="fw-bold text-secondary mt-3">Additional Amenities</h6>
+                    {% if property.additional_amenities %}
+                        <p>{{ property.additional_amenities }}</p>
+                    {% else %}
+                        <p class="text-muted">No additional amenities.</p>
+                    {% endif %}
+
+                    <h6 class="fw-bold text-secondary mt-3">Nearby</h6>
+                    {% if property.nearby %}
+                        <p>{{ property.nearby }}</p>
+                    {% else %}
+                        <p class="text-muted">No nearby info provided.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Full Description -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h5 class="fw-bold text-secondary mb-3">Full Description</h5>
+                    {% if property.full_description %}
+                        <p>{{ property.full_description }}</p>
+                    {% else %}
+                        <p class="text-muted">No description available.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="d-flex justify-content-end mt-4 gap-2">
+        {% if property.status=='Pending' or property.status=='Deactive' %}
+        <a href="{{ url_for('admin_approve_property', property_id=property.id) }}" class="btn btn-success">
+            <i class="bi bi-check-circle"></i> Approve
+        </a>
+        {% else %}
+        <a href="{{ url_for('make_property_deactive', property_id=property.id) }}" class="btn btn-warning">
+            <i class="bi bi-slash-circle"></i> Deactivate
+        </a>
+        {% endif %}
+        <a href="{{ url_for('admin_view_all_properties') }}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Back
+        </a>
+    </div>
+
+</div>
+{% endblock %}

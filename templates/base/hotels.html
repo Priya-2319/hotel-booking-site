@@ -1,0 +1,345 @@
+{% extends 'base/index.html' %}
+
+{% block title %}Hotels{% endblock %}
+
+{% block content %}
+<section class="hotel-listing py-5">
+    <!-- Hero Section -->
+    <div class="hotel-hero position-relative overflow-hidden mb-5">
+        <div class="container py-5">
+            <div class="row py-5">
+                <div class="col-lg-6 text-white">
+                    <h1 class="display-4 fw-bold mb-4 animate__animated animate__fadeInDown">Discover Luxury Stays</h1>
+                    <p class="lead mb-4 animate__animated animate__fadeIn animate__delay-1s">Explore our curated collection of world-class hotels and resorts</p>
+                </div>
+            </div>
+        </div>
+        <div class="hero-overlay"></div>
+    </div>
+
+    <!-- Search Filters -->
+    <div class="container mb-5">
+        <div class="search-card bg-white p-4 rounded-4 shadow-lg animate__animated animate__fadeInUp">
+            <form class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Destination</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0"><i class="fas fa-map-marker-alt"></i></span>
+                        <input type="text" class="form-control" placeholder="Where are you going?">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Check In</label>
+                    <input type="date" class="form-control">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Check Out</label>
+                    <input type="date" class="form-control">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Guests</label>
+                    <select class="form-select">
+                        <option>1 Guest</option>
+                        <option>2 Guests</option>
+                        <option selected>3+ Guests</option>
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button class="btn btn-primary w-100 py-2">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Hotel Listings -->
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2 class="fw-bold mb-3">Featured Hotels</h2>
+                <div class="d-flex overflow-auto pb-3 scroll-container">
+                    <button class="btn btn-outline-primary rounded-pill me-2 filter-btn active">All</button>
+                    <button class="btn btn-outline-primary rounded-pill me-2 filter-btn">Luxury</button>
+                    <button class="btn btn-outline-primary rounded-pill me-2 filter-btn">Beach</button>
+                    <button class="btn btn-outline-primary rounded-pill me-2 filter-btn">Mountain</button>
+                    <button class="btn btn-outline-primary rounded-pill me-2 filter-btn">City</button>
+                    <button class="btn btn-outline-primary rounded-pill me-2 filter-btn">Resorts</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 hotel-container">
+            <!-- Hotel 1 -->
+            <div class="col-lg-4 col-md-6 hotel-card">
+                <div class="card border-0 shadow-sm h-100 overflow-hidden animate__animated animate__fadeInUp">
+                    <div class="position-relative">
+                        <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                             class="card-img-top hotel-image" alt="Grand Marina Hotel">
+                        <div class="position-absolute top-0 end-0 m-3">
+                            <span class="badge bg-success">4.8 <i class="fas fa-star"></i></span>
+                        </div>
+                        <div class="position-absolute bottom-0 start-0 w-100 px-3 py-2 text-white hotel-overlay">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span><i class="fas fa-map-marker-alt me-1"></i> Dubai, UAE</span>
+                                <span class="fw-bold">$320/night</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Grand Marina Hotel</h5>
+                        <div class="mb-3">
+                            <span class="badge bg-light text-dark me-1"><i class="fas fa-wifi text-primary me-1"></i> Free WiFi</span>
+                            <span class="badge bg-light text-dark me-1"><i class="fas fa-swimming-pool text-primary me-1"></i> Pool</span>
+                            <span class="badge bg-light text-dark"><i class="fas fa-utensils text-primary me-1"></i> Restaurant</span>
+                        </div>
+                        <p class="card-text text-muted">Experience unparalleled luxury with breathtaking views of the Dubai Marina and world-class amenities.</p>
+                        <a href="#" class="btn btn-outline-primary w-100 mt-2">View Details</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hotel 2 -->
+            <div class="col-lg-4 col-md-6 hotel-card">
+                <div class="card border-0 shadow-sm h-100 overflow-hidden animate__animated animate__fadeInUp animate__delay-1s">
+                    <div class="position-relative">
+                        <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                             class="card-img-top hotel-image" alt="Mountain View Resort">
+                        <div class="position-absolute top-0 end-0 m-3">
+                            <span class="badge bg-success">4.6 <i class="fas fa-star"></i></span>
+                        </div>
+                        <div class="position-absolute bottom-0 start-0 w-100 px-3 py-2 text-white hotel-overlay">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span><i class="fas fa-map-marker-alt me-1"></i> Swiss Alps</span>
+                                <span class="fw-bold">$280/night</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Mountain View Resort</h5>
+                        <div class="mb-3">
+                            <span class="badge bg-light text-dark me-1"><i class="fas fa-snowflake text-primary me-1"></i> Ski-in/Ski-out</span>
+                            <span class="badge bg-light text-dark me-1"><i class="fas fa-spa text-primary me-1"></i> Spa</span>
+                            <span class="badge bg-light text-dark"><i class="fas fa-fireplace text-primary me-1"></i> Fireplace</span>
+                        </div>
+                        <p class="card-text text-muted">Nestled in the heart of the Swiss Alps, enjoy breathtaking views and cozy luxury accommodations.</p>
+                        <a href="#" class="btn btn-outline-primary w-100 mt-2">View Details</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hotel 3 -->
+            <div class="col-lg-4 col-md-6 hotel-card">
+                <div class="card border-0 shadow-sm h-100 overflow-hidden animate__animated animate__fadeInUp animate__delay-2s">
+                    <div class="position-relative">
+                        <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                             class="card-img-top hotel-image" alt="Beach Paradise">
+                        <div class="position-absolute top-0 end-0 m-3">
+                            <span class="badge bg-success">4.9 <i class="fas fa-star"></i></span>
+                        </div>
+                        <div class="position-absolute bottom-0 start-0 w-100 px-3 py-2 text-white hotel-overlay">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span><i class="fas fa-map-marker-alt me-1"></i> Maldives</span>
+                                <span class="fw-bold">$450/night</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Beach Paradise Resort</h5>
+                        <div class="mb-3">
+                            <span class="badge bg-light text-dark me-1"><i class="fas fa-umbrella-beach text-primary me-1"></i> Private Beach</span>
+                            <span class="badge bg-light text-dark me-1"><i class="fas fa-water text-primary me-1"></i> Overwater Bungalow</span>
+                            <span class="badge bg-light text-dark"><i class="fas fa-cocktail text-primary me-1"></i> Beach Bar</span>
+                        </div>
+                        <p class="card-text text-muted">Your dream tropical getaway with crystal clear waters and white sandy beaches awaits.</p>
+                        <a href="#" class="btn btn-outline-primary w-100 mt-2">View Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- View More Button -->
+        <div class="text-center mt-5">
+            <button class="btn btn-primary px-4 py-2 view-more-btn">View More Hotels <i class="fas fa-arrow-down ms-2"></i></button>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Hero Section */
+    .hotel-hero {
+        background: linear-gradient(135deg, #2a5298 0%, #1e3c72 100%);
+        min-height: 300px;
+        border-radius: 0 0 20px 20px;
+    }
+    
+    .hero-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80') center/cover;
+        opacity: 0.3;
+        z-index: 0;
+    }
+    
+    /* Hotel Cards */
+    .hotel-card {
+        transition: transform 0.3s ease;
+    }
+    
+    .hotel-card:hover {
+        transform: translateY(-10px);
+    }
+    
+    .hotel-image {
+        height: 250px;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+    
+    .hotel-card:hover .hotel-image {
+        transform: scale(1.05);
+    }
+    
+    .hotel-overlay {
+        background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+    }
+    
+    /* Filter Buttons */
+    .scroll-container {
+        scrollbar-width: none; /* Firefox */
+    }
+    
+    .scroll-container::-webkit-scrollbar {
+        display: none; /* Chrome/Safari */
+    }
+    
+    .filter-btn {
+        white-space: nowrap;
+        transition: all 0.3s ease;
+    }
+    
+    .filter-btn.active {
+        background-color: #2a5298;
+        color: white;
+    }
+    
+    /* Animations */
+    .animate__animated {
+        --animate-duration: 0.8s;
+    }
+    
+    /* View More Button */
+    .view-more-btn {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .view-more-btn::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: all 0.6s ease;
+    }
+    
+    .view-more-btn:hover::after {
+        left: 100%;
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        .hotel-hero {
+            min-height: 200px;
+        }
+        
+        .search-card {
+            margin-top: -50px;
+        }
+        
+        .hotel-image {
+            height: 200px;
+        }
+    }
+</style>
+
+<!-- Add Animate.css for animations -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Filter button functionality
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Here you would filter hotels based on category
+                // For demo, we'll just animate the cards
+                const hotelCards = document.querySelectorAll('.hotel-card');
+                hotelCards.forEach((card, index) => {
+                    card.style.animation = 'none';
+                    setTimeout(() => {
+                        card.style.animation = `fadeInUp 0.5s ease ${index * 0.1}s forwards`;
+                    }, 10);
+                });
+            });
+        });
+        
+        // View more button functionality
+        const viewMoreBtn = document.querySelector('.view-more-btn');
+        if (viewMoreBtn) {
+            viewMoreBtn.addEventListener('click', function() {
+                // Here you would load more hotels via AJAX or show hidden ones
+                // For demo, we'll just animate the button
+                this.innerHTML = 'Loading... <i class="fas fa-spinner fa-spin ms-2"></i>';
+                setTimeout(() => {
+                    this.innerHTML = 'View More Hotels <i class="fas fa-arrow-down ms-2"></i>';
+                    // Simulate loading more hotels
+                    const hotelContainer = document.querySelector('.hotel-container');
+                    const newHotels = document.createElement('div');
+                    newHotels.innerHTML = `
+                        <div class="col-lg-4 col-md-6 hotel-card">
+                            <!-- New hotel card would be added here -->
+                        </div>
+                    `;
+                    // hotelContainer.appendChild(newHotels);
+                }, 1500);
+            });
+        }
+        
+        // Scroll animation for hotel cards
+        const animateOnScroll = function() {
+            const hotelCards = document.querySelectorAll('.hotel-card');
+            
+            hotelCards.forEach((card, index) => {
+                const cardPosition = card.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.2;
+                
+                if (cardPosition < screenPosition) {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }
+            });
+        };
+        
+        // Initialize animation state
+        const hotelCards = document.querySelectorAll('.hotel-card');
+        hotelCards.forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'all 0.5s ease';
+        });
+        
+        // Run once on load
+        animateOnScroll();
+        
+        // Then on scroll
+        window.addEventListener('scroll', animateOnScroll);
+    });
+</script>
+{% endblock %}

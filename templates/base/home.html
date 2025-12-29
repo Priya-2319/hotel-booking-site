@@ -1,0 +1,364 @@
+{% extends "base/index.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section position-relative overflow-hidden">
+    <div class="container">
+        <div class="row align-items-center min-vh-80 py-5">
+            <div class="col-lg-6 text-center text-lg-start">
+                <h1 class="display-3 fw-bold text-white mb-4">Find Your Perfect Stay</h1>
+                <p class="lead text-white mb-5">Discover luxury hotels, cozy resorts, and amazing deals for your next
+                    vacation.</p>
+
+                <!-- Search Form -->
+                <div class="bg-white rounded-4 p-4 shadow-lg">
+                    <form action="{{ url_for('property_search') }}" method="Get">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="destination" name="destination"
+                                        placeholder="Where to?">
+                                    <label for="destination"><i
+                                            class="fas fa-map-marker-alt me-2"></i>Destination</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-floating">
+                                    <input type="date" class="form-control" id="check-in" name="check_in">
+                                    <label for="check-in"><i class="fas fa-calendar-alt me-2"></i>Check In</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-floating">
+                                    <input type="date" class="form-control" id="check-out" name="check_out">
+                                    <label for="check-out"><i class="fas fa-calendar-alt me-2"></i>Check Out</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary btn-lg w-100 py-3">
+                                    <i class="fas fa-search me-2"></i>Search Hotels
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-6 d-none d-lg-block">
+                <div class="hero-image position-relative">
+                    <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+                        alt="Luxury Hotel" class="img-fluid rounded-4 shadow-lg animate-float">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Animated Background -->
+    <div class="hero-wave">
+        <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path
+                d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z"
+                opacity=".25" fill="#fff"></path>
+            <path
+                d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z"
+                opacity=".5" fill="#fff"></path>
+            <path
+                d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z"
+                fill="#fff"></path>
+        </svg>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5 features">
+    <div class="container py-5">
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-8 text-center">
+                <h2 class="fw-bold display-5 mb-4">Why Choose LuxStay?</h2>
+                <p class="lead" style="color:#000000">We provide the best hotel booking experience with exclusive
+                    benefits</p>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card p-4 rounded-4 h-100 text-center bg-white shadow-sm">
+                    <div class="icon-box bg-primary bg-opacity-10 text-primary rounded-circle mx-auto mb-4">
+                        <i class="fas fa-hotel fa-2x"></i>
+                    </div>
+                    <h3 class="h5 fw-bold mb-3">5000+ Hotels</h3>
+                    <p class="text-muted">Wide selection of luxury and budget hotels worldwide</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card p-4 rounded-4 h-100 text-center bg-white shadow-sm">
+                    <div class="icon-box bg-success bg-opacity-10 text-success rounded-circle mx-auto mb-4">
+                        <i class="fas fa-percent fa-2x"></i>
+                    </div>
+                    <h3 class="h5 fw-bold mb-3">Best Price Guarantee</h3>
+                    <p class="text-muted">We guarantee the best prices for your perfect stay</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card p-4 rounded-4 h-100 text-center bg-white shadow-sm">
+                    <div class="icon-box bg-warning bg-opacity-10 text-warning rounded-circle mx-auto mb-4">
+                        <i class="fas fa-headset fa-2x"></i>
+                    </div>
+                    <h3 class="h5 fw-bold mb-3">24/7 Support</h3>
+                    <p class="text-muted">Our customer service team is always here to help</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card p-4 rounded-4 h-100 text-center bg-white shadow-sm">
+                    <div class="icon-box bg-info bg-opacity-10 text-info rounded-circle mx-auto mb-4">
+                        <i class="fas fa-shield-alt fa-2x"></i>
+                    </div>
+                    <h3 class="h5 fw-bold mb-3">Secure Booking</h3>
+                    <p class="text-muted">Your data is protected with our secure system</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Special Offers -->
+<section class="py-5 bg-light">
+    <div class="container py-5">
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-8 text-center">
+                <h2 class="fw-bold display-5 mb-4">Special Offers</h2>
+                <p class="lead section-muted">Exclusive deals and discounts for our customers</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Testimonials -->
+<section class="py-5">
+    <div class="container py-5">
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-8 text-center">
+                <h2 class="fw-bold display-5 mb-4">What Our Guests Say</h2>
+                <p class="lead text-muted">Hear from travelers who have experienced LuxStay</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter -->
+<section class="py-5 bg-primary text-white">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h2 class="fw-bold display-5 mb-4">Get Exclusive Deals</h2>
+                <p class="lead mb-5">Subscribe to our newsletter and receive special offers and travel inspiration</p>
+
+                <form class="newsletter-form mx-auto" style="max-width: 500px;">
+                    <div class="input-group">
+                        <input type="email" class="form-control py-3" placeholder="Your email address">
+                        <button class="btn btn-dark px-4" type="submit">Subscribe</button>
+                    </div>
+                    <div class="form-text mt-2 text-white-50">We'll never share your email with anyone else.</div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Hero Section */
+    .hero-section {
+        background: linear-gradient(90deg, #830c3b 0%, #131e7a 100%);
+        color: white;
+        padding-top: 80px;
+        padding-bottom: 120px;
+        position: relative;
+    }
+
+    .hero-wave {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 150px;
+        overflow: hidden;
+    }
+
+    .hero-wave svg {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .hero-image {
+        animation: fadeIn 1s ease-in-out;
+    }
+
+    .animate-float {
+        animation: float 6s ease-in-out infinite;
+    }
+
+    /* Features */
+    .features {
+        background: linear-gradient(90deg, #31aec5 0%, #5bdf6a 100%);
+    }
+
+    .icon-box {
+        width: 70px;
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .feature-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 25px rgba(224, 9, 38, 0.537) !important;
+    }
+
+    /* Destinations */
+    .destination-card {
+        height: 300px;
+    }
+
+    .destination-image {
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .destination-card:hover .destination-image {
+        transform: scale(1.1);
+    }
+
+    .destination-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .destination-card:hover .destination-overlay {
+        opacity: 1;
+    }
+
+
+    /* Animations */
+    @keyframes float {
+        0% {
+            transform: translateY(0px);
+        }
+
+        50% {
+            transform: translateY(-20px);
+        }
+
+        100% {
+            transform: translateY(0px);
+        }
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .hero-section {
+            padding-top: 60px;
+            padding-bottom: 80px;
+            text-align: center;
+        }
+
+        .display-3 {
+            font-size: 2.5rem;
+        }
+    }
+</style>
+
+<!-- JavaScript -->
+<script>
+    // Initialize testimonial slider
+    document.addEventListener('DOMContentLoaded', function () {
+        // You would initialize a slider here (like TinySlider or Splide)
+        // For now, we'll just log to console
+        console.log('Testimonial slider would be initialized here');
+
+        // Set minimum dates for check-in/check-out
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('check-in').min = today;
+
+        // Update check-out min date when check-in changes
+        document.getElementById('check-in').addEventListener('change', function () {
+            document.getElementById('check-out').min = this.value;
+        });
+
+        // Animate elements when they come into view
+        const animateOnScroll = function () {
+            const elements = document.querySelectorAll('.feature-card, .destination-card, .offer-card');
+
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.2;
+
+                if (elementPosition < screenPosition) {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }
+            });
+        };
+
+        // Set initial state
+        const features = document.querySelectorAll('.feature-card');
+        const destinations = document.querySelectorAll('.destination-card');
+        const offers = document.querySelectorAll('.offer-card');
+
+        features.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = `opacity 0.5s ease ${index * 0.1}s, transform 0.5s ease ${index * 0.1}s`;
+        });
+
+        destinations.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = `opacity 0.5s ease ${index * 0.1}s, transform 0.5s ease ${index * 0.1}s`;
+        });
+
+        offers.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = `opacity 0.5s ease ${index * 0.1}s, transform 0.5s ease ${index * 0.1}s`;
+        });
+
+        // Run once on load
+        animateOnScroll();
+
+        // Then on scroll
+        window.addEventListener('scroll', animateOnScroll);
+    });
+</script>
+{% endblock %}

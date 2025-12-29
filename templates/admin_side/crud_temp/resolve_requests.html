@@ -1,0 +1,133 @@
+{% extends 'admin_side/index.html' %}
+{% block title %}Resolve Support Requests - LuxStay{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-gradient-primary shadow-lg border-0 rounded-4">
+                <div class="card-body text-center text-white p-4">
+                    <h2 class="mb-1"><i class="fas fa-tools me-2"></i>Resolve Support Requests</h2>
+                    <p class="mb-0 opacity-75">Manage and resolve pending support issues.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if support_requests %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow border-0 rounded-4">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Message Code</th>
+                                    <th>From</th>
+                                    <th>Subject</th>
+                                    <th>Message</th>
+                                    <th>Status</th>
+                                    <th>Submitted At</th>
+                                    <th>Resolution</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for req in support_requests %}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+                                    <td><span class="badge bg-dark">{{ req.message_code }}</span></td>
+                                    <td>
+                                        <strong>{{ req.msg_from }}</strong><br>
+                                        <small class="text-muted">{{ req.name }} ({{ req.email }})</small>
+                                    </td>
+                                    <td>{{ req.subject }}</td>
+                                    <td>{{ req.message }}</td>
+                                    <td>
+                                        {% if req.status == "Pending" %}
+                                            <span class="badge bg-warning text-dark">Pending</span>
+                                        {% elif req.status == "In Progress" %}
+                                            <span class="badge bg-info">In Progress</span>
+                                        {% elif req.status == "Resolved" %}
+                                            <span class="badge bg-success">Resolved</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ req.created_at.strftime("%b %d, %Y %I:%M %p") }}</td>
+                                    <td>
+                                        {% if req.resolution %}
+                                            <div class="text-success">{{ req.resolution }}</div>
+                                            <small class="text-muted">Resolved at {{ req.resolved_at.strftime("%b %d, %Y %I:%M %p") }}</small>
+                                        {% else %}
+                                            <span class="text-muted">Not resolved yet</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if req.status != "Resolved" %}
+                                        <!-- Button trigger modal -->
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#resolveModal{{ req.id }}">
+                                            <i class="fas fa-check-circle me-1"></i>Resolve
+                                        </button>
+                                        {% else %}
+                                        <button class="btn btn-sm btn-secondary" disabled>
+                                            <i class="fas fa-check-double me-1"></i>Done
+                                        </button>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+
+                                <!-- Modal for Resolution -->
+                                <div class="modal fade" id="resolveModal{{ req.id }}" tabindex="-1" aria-labelledby="resolveModalLabel{{ req.id }}" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                                        <div class="modal-content rounded-4 shadow">
+                                            <div class="modal-header bg-gradient-info text-white rounded-top">
+                                                <h5 class="modal-title" id="resolveModalLabel{{ req.id }}">
+                                                    <i class="fas fa-reply me-2"></i>Resolve Request - {{ req.message_code }}
+                                                </h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <form method="POST">
+                                                <div class="modal-body">
+                                                    <input type="hidden" name="request_id" value="{{ req.id }}">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Resolution</label>
+                                                        <textarea class="form-control" name="resolution" rows="4" placeholder="Enter resolution details..." required></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                    <button type="submit" class="btn btn-success"><i class="fas fa-save me-2"></i>Submit Resolution</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-info text-center rounded-4 shadow-sm">
+        <i class="fas fa-info-circle me-2"></i>No support requests available at the moment.
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    .bg-gradient-primary {
+        background: linear-gradient(87.4deg, #4e54c8 0%, #8f94fb 100%) !important;
+    }
+    .bg-gradient-info {
+        background: linear-gradient(87.4deg, #36d1dc 0%, #5b86e5 100%) !important;
+    }
+    .table td, .table th {
+        vertical-align: middle;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,603 @@
+{% extends "base/index.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="registration-page">
+    <!-- Background Image with Overlay -->
+    <div class="registration-background">
+        <div class="background-overlay"></div>
+        <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+             alt="Hotel Lobby" 
+             class="background-image">
+    </div>
+
+    <!-- Registration Container -->
+    <div class="container">
+        <div class="row justify-content-center align-items-center min-vh-100">
+            <div class="col-lg-8 col-md-10">
+                <div class="registration-card shadow-lg rounded-4 overflow-hidden">
+                    <!-- Mithila Border Elements -->
+                    <div class="mithila-border mithila-border-top"></div>
+                    <div class="mithila-border mithila-border-right"></div>
+                    <div class="mithila-border mithila-border-bottom"></div>
+                    <div class="mithila-border mithila-border-left"></div>
+                    
+                    <!-- Card Header -->
+                    <div class="registration-card-header text-center py-4">
+                        <h2 class="fw-bold mb-1">Create Your Account</h2>
+                        <p style="color: rgb(232, 159, 64);">Join us and get access to amazing features</p>
+                    </div>
+                    
+                    <!-- Card Body -->
+                    <div class="registration-card-body p-4 p-sm-5">
+                        <form action="{{ url_for('register') }}" method="POST" id="registrationForm">
+                            
+                            <!-- Role Selection -->
+                            <div class="mb-4">
+                                <label for="role" class="form-label fw-bold">Register As</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0">
+                                        <i class="fas fa-user-tag text-primary"></i>
+                                    </span>
+                                    <select class="form-select" id="role" name="role" required onchange="showRoleSpecificForm()">
+                                        <option value="" selected disabled>Select your role</option>
+                                        <option value="user">Guest/User</option>
+                                        <option value="owner">Property Owner</option>
+                                        <option value="admin">Administrator</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <!-- Common Fields for All Roles -->
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <label for="name" class="form-label fw-bold">Full Name</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-end-0">
+                                            <i class="fas fa-user text-primary"></i>
+                                        </span>
+                                        <input type="text" 
+                                               class="form-control" 
+                                               id="name" 
+                                               name="name" 
+                                               placeholder="Enter your full name" 
+                                               required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="email" class="form-label fw-bold">Email Address</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-end-0">
+                                            <i class="fas fa-envelope text-primary"></i>
+                                        </span>
+                                        <input type="email" 
+                                               class="form-control" 
+                                               id="email" 
+                                               name="email" 
+                                               placeholder="Enter your email" 
+                                               required>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <label for="phone" class="form-label fw-bold">Phone Number</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-end-0">
+                                            <i class="fas fa-phone text-primary"></i>
+                                        </span>
+                                        <input type="tel" 
+                                               class="form-control" 
+                                               id="phone" 
+                                               name="phone" 
+                                               placeholder="Enter your phone number" 
+                                               required>
+                                    </div>
+                                </div>
+                                <!-- date of birth -->
+                                <div class="col-md-6">
+                                    <label for="dob" class="form-label fw-bold">Date of Birth</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-end-0">
+                                            <i class="fas fa-calendar-alt text-primary"></i>
+                                        </span>
+                                        <input type="date" 
+                                               class="form-control" 
+                                               id="dob" 
+                                               name="dob" 
+                                               required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <label for="password" class="form-label fw-bold">Password</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-end-0">
+                                            <i class="fas fa-lock text-primary"></i>
+                                        </span>
+                                        <input type="password" 
+                                               class="form-control" 
+                                               id="password" 
+                                               name="password" 
+                                               placeholder="Create a password" 
+                                               required>
+                                        <button class="btn btn-outline-secondary toggle-password" type="button">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="col md-6">
+                                <label for="confirm_password" class="form-label fw-bold">Confirm Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0">
+                                        <i class="fas fa-lock text-primary"></i>
+                                    </span>
+                                    <input type="password" 
+                                           class="form-control" 
+                                           id="confirm_password" 
+                                           name="confirm_password" 
+                                           placeholder="Confirm your password" 
+                                           required>
+                                    <button class="btn btn-outline-secondary toggle-password" type="button">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                                <div id="passwordMatch" class="form-text"></div>
+                            </div>
+                            </div>
+                            
+                            <!-- Confirm Password -->
+                            
+                            
+                            <!-- Property Owner Specific Fields -->
+                            <div id="ownerFields" class="role-specific-fields" style="display: none;">
+                                <h5 class="fw-bold mb-3 border-bottom pb-2">Property Owner Information</h5>
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <label for="address" class="form-label fw-bold">Address</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light border-end-0">
+                                                <i class="fas fa-map-marker-alt text-primary"></i>
+                                            </span>
+                                            <input type="text" 
+                                                   class="form-control" 
+                                                   id="address" 
+                                                   name="address" 
+                                                   placeholder="Enter your full address">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <label for="id_type" class="form-label fw-bold">ID Type</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light border-end-0">
+                                                <i class="fas fa-id-badge text-primary"></i>
+                                            </span>
+                                            <select class="form-select" id="id_type" name="id_type">
+                                                <option value="" selected disabled>Select ID type</option>
+                                                <option value="Aadhar">Aadhar</option>
+                                                <option value="Passport">Passport</option>
+                                                <option value="Driver License">Driver License</option>
+                                                <option value="National ID">National ID</option>
+                                                <option value="Other">Other</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="id_number" class="form-label fw-bold">ID Number</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light border-end-0">
+                                                <i class="fas fa-fingerprint text-primary"></i>
+                                            </span>
+                                            <input type="text" 
+                                                   class="form-control" 
+                                                   id="id_number" 
+                                                   name="id_number" 
+                                                   placeholder="Enter your ID number">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Admin Specific Fields -->
+                            <div id="adminFields" class="role-specific-fields" style="display: none;">
+                                <h5 class="fw-bold mb-3 border-bottom pb-2">Administrator Information</h5>
+                                <div class="mb-4">
+                                    <label for="admin_code" class="form-label fw-bold">Admin Code</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-end-0">
+                                            <i class="fas fa-key text-primary"></i>
+                                        </span>
+                                        <input type="text" 
+                                               class="form-control" 
+                                               id="admin_code" 
+                                               name="admin_code" 
+                                               placeholder="Enter admin code">
+                                    </div>
+                                    <div class="form-text">Provided by system administrator</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Terms and Conditions -->
+                            <div class="mb-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="terms" name="terms" required>
+                                    <label class="form-check-label" for="terms">
+                                        I agree to the <a href="#" class="text-decoration-none">Terms and Conditions</a> and <a href="#" class="text-decoration-none">Privacy Policy</a>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-primary w-100 py-2 mb-3 fw-bold">
+                                <i class="fas fa-user-plus me-2"></i> Create Account
+                            </button>
+                            
+                            <!-- Already have an account -->
+                            <div class="text-center">
+                                <p class="mb-0">Already have an account? <a href="{{ url_for('login') }}" class="text-decoration-none fw-bold">Sign in</a></p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Base Styles */
+    .registration-page {
+        position: relative;
+        min-height: 100vh;
+        overflow: hidden;
+    }
+    
+    /* Background Styles */
+    .registration-background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+    }
+    
+    .background-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: brightness(0.7);
+    }
+    
+    .background-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(159, 157, 44, 0.8) 0%, rgba(25, 49, 95, 0.9) 100%);
+        z-index: 1;
+    }
+    
+    /* Card Styles */
+    .container {
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+
+    .registration-card {
+        background-color: white;
+        border: none;
+        animation: fadeInUp 0.5s ease-out;
+        position: relative;
+        overflow: hidden;
+        border-radius: 8px;
+    }
+
+    /* Mithila Painting Border */
+    .mithila-border {
+        position: absolute;
+        background-repeat: repeat;
+        z-index: 1;
+    }
+
+    .mithila-border-top {
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 12px;
+        background: linear-gradient(90deg, 
+            #e63946 0%, #e63946 10%, 
+            #f1faee 10%, #f1faee 20%, 
+            #a8dadc 20%, #a8dadc 30%, 
+            #457b9d 30%, #457b9d 40%,
+            #e63946 40%, #e63946 50%,
+            #f1faee 50%, #f1faee 60%,
+            #a8dadc 60%, #a8dadc 70%,
+            #457b9d 70%, #457b9d 80%,
+            #e63946 80%, #e63946 90%,
+            #f1faee 90%, #f1faee 100%);
+        background-size: 100% 100%;
+    }
+
+    .mithila-border-right {
+        top: 12px;
+        right: 0;
+        bottom: 12px;
+        width: 12px;
+        background: linear-gradient(180deg, 
+            #ffbe0b 0%, #ffbe0b 10%, 
+            #fb5607 10%, #fb5607 20%, 
+            #8338ec 20%, #8338ec 30%, 
+            #3a86ff 30%, #3a86ff 40%,
+            #ffbe0b 40%, #ffbe0b 50%,
+            #fb5607 50%, #fb5607 60%,
+            #8338ec 60%, #8338ec 70%,
+            #3a86ff 70%, #3a86ff 80%,
+            #ffbe0b 80%, #ffbe0b 90%,
+            #fb5607 90%, #fb5607 100%);
+        background-size: 100% 100%;
+    }
+
+    .mithila-border-bottom {
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 12px;
+        background: linear-gradient(90deg, 
+            #9b5de5 0%, #9b5de5 15%, 
+            #f15bb5 15%, #f15bb5 30%, 
+            #fee440 30%, #fee440 45%,
+            #00bbf9 45%, #00bbf9 60%,
+            #00f5d4 60%, #00f5d4 75%,
+            #9b5de5 75%, #9b5de5 90%,
+            #f15bb5 90%, #f15bb5 100%);
+        background-size: 100% 100%;
+    }
+
+    .mithila-border-left {
+        top: 12px;
+        left: 0;
+        bottom: 12px;
+        width: 12px;
+        background: linear-gradient(180deg, 
+            #2a9d8f 0%, #2a9d8f 10%, 
+            #e9c46a 10%, #e9c46a 20%, 
+            #f4a261 20%, #f4a261 30%, 
+            #e76f51 30%, #e76f51 40%,
+            #2a9d8f 40%, #2a9d8f 50%,
+            #e9c46a 50%, #e9c46a 60%,
+            #f4a261 60%, #f4a261 70%,
+            #e76f51 70%, #e76f51 80%,
+            #2a9d8f 80%, #2a9d8f 90%,
+            #e9c46a 90%, #e9c46a 100%);
+        background-size: 100% 100%;
+    }
+
+    .registration-card-header {
+        background: linear-gradient(135deg, #d4553f 0%, #1e3c72 100%);
+        color: white;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .registration-card-body {
+        position: relative;
+        z-index: 2;
+    }
+    
+    /* Role Specific Fields */
+    .role-specific-fields {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-left: 4px solid #2a5298;
+    }
+    
+    /* Input Styles */
+    .input-group-text {
+        transition: all 0.3s ease;
+    }
+    
+    .form-control:focus + .input-group-text,
+    .form-select:focus + .input-group-text {
+        background-color: #e9ecef;
+        color: #2a5298;
+    }
+    
+    /* Toggle Password Button */
+    .toggle-password {
+        border-left: none;
+    }
+    
+    .toggle-password:hover {
+        background-color: #e9ecef;
+    }
+    
+    /* Animations */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        .registration-card {
+            border-radius: 0 !important;
+        }
+        
+        .registration-page {
+            background: linear-gradient(135deg, #2a5298 0%, #1e3c72 100%);
+        }
+        
+        .registration-background {
+            display: none;
+        }
+        
+        .mithila-border {
+            display: none; /* Hide complex borders on small screens */
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Toggle password visibility
+        const togglePasswordButtons = document.querySelectorAll('.toggle-password');
+        togglePasswordButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const input = this.parentElement.querySelector('input');
+                const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                input.setAttribute('type', type);
+                this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+            });
+        });
+        
+        // Check password match
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirm_password');
+        const passwordMatch = document.getElementById('passwordMatch');
+        
+        function checkPasswordMatch() {
+            if (password.value && confirmPassword.value) {
+                if (password.value === confirmPassword.value) {
+                    passwordMatch.innerHTML = '<i class="fas fa-check text-success"></i> Passwords match';
+                    passwordMatch.style.color = 'green';
+                } else {
+                    passwordMatch.innerHTML = '<i class="fas fa-times text-danger"></i> Passwords do not match';
+                    passwordMatch.style.color = 'red';
+                }
+            } else {
+                passwordMatch.innerHTML = '';
+            }
+        }
+        
+        password.addEventListener('input', checkPasswordMatch);
+        confirmPassword.addEventListener('input', checkPasswordMatch);
+        
+        // Add focus effects to form elements
+        const formControls = document.querySelectorAll('.form-control, .form-select');
+        formControls.forEach(control => {
+            control.addEventListener('focus', function() {
+                const inputGroupText = this.parentElement.querySelector('.input-group-text');
+                if (inputGroupText) {
+                    inputGroupText.style.backgroundColor = '#e9ecef';
+                    inputGroupText.style.color = '#2a5298';
+                }
+            });
+            
+            control.addEventListener('blur', function() {
+                const inputGroupText = this.parentElement.querySelector('.input-group-text');
+                if (inputGroupText) {
+                    inputGroupText.style.backgroundColor = '';
+                    inputGroupText.style.color = '';
+                }
+            });
+        });
+    });
+    
+    // Show role-specific form fields
+    function showRoleSpecificForm() {
+        const role = document.getElementById('role').value;
+        
+        // Hide all role-specific fields first
+        document.querySelectorAll('.role-specific-fields').forEach(field => {
+            field.style.display = 'none';
+        });
+        
+        // Show fields for selected role
+        if (role === 'owner') {
+            document.getElementById('ownerFields').style.display = 'block';
+            // Make owner-specific fields required
+            document.getElementById('owner_code').required = true;
+            document.getElementById('address').required = true;
+            document.getElementById('id_type').required = true;
+            document.getElementById('id_number').required = true;
+            // Make admin fields not required
+            document.getElementById('admin_code').required = false;
+        } 
+        else if (role === 'admin') {
+            document.getElementById('adminFields').style.display = 'block';
+            // Make admin-specific fields required
+            document.getElementById('admin_code').required = true;
+            // Make owner fields not required
+            document.getElementById('owner_code').required = false;
+            document.getElementById('address').required = false;
+            document.getElementById('id_type').required = false;
+            document.getElementById('id_number').required = false;
+        } 
+        else {
+            // User registration - no additional fields
+            document.getElementById('owner_code').required = false;
+            document.getElementById('address').required = false;
+            document.getElementById('id_type').required = false;
+            document.getElementById('id_number').required = false;
+            document.getElementById('admin_code').required = false;
+        }
+    }
+    
+    // Form validation before submission
+    document.getElementById('registrationForm').addEventListener('submit', function(e) {
+        const role = document.getElementById('role').value;
+        
+        // Check if role is selected
+        if (!role) {
+            e.preventDefault();
+            alert('Please select your role');
+            document.getElementById('role').focus();
+            return;
+        }
+        
+        // Check passwords match
+        if (password.value !== confirmPassword.value) {
+            e.preventDefault();
+            alert('Passwords do not match');
+            password.focus();
+            return;
+        }
+        
+        // Check terms and conditions
+        if (!document.getElementById('terms').checked) {
+            e.preventDefault();
+            alert('You must agree to the terms and conditions');
+            return;
+        }
+        
+        // Role-specific validation
+        if (role === 'owner') {
+            if (!document.getElementById('owner_code').value || 
+                !document.getElementById('address').value || 
+                !document.getElementById('id_type').value || 
+                !document.getElementById('id_number').value) {
+                e.preventDefault();
+                alert('Please fill all required fields for property owner');
+                return;
+            }
+        }
+        
+        if (role === 'admin') {
+            if (!document.getElementById('admin_code').value) {
+                e.preventDefault();
+                alert('Please enter admin code');
+                document.getElementById('admin_code').focus();
+                return;
+            }
+        }
+    });
+</script>
+{% endblock %}

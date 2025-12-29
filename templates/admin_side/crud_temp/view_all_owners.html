@@ -1,0 +1,383 @@
+{% extends 'admin_side/index.html' %}
+{% block title %}
+Owners List - LuxStay Admin
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-gradient-primary shadow-lg border-0">
+                <div class="card-body p-4 d-flex flex-column flex-md-row justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-shape bg-white rounded-circle p-3 me-3">
+                            <i class="fas fa-user-tie text-primary fs-4"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-white mb-0">All Property Owners</h2>
+                            <p class="text-white opacity-8 mb-0">Property Owners On LuxStay</p>
+                        </div>
+                    </div>
+                    <div class="mt-3 mt-md-0">
+                        <span class="badge bg-light text-primary px-3 py-2 shadow-sm">
+                            <i class="fas fa-calendar-alt me-2"></i>Last Updated: {{ today_date }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-xl-6 col-md-6 mb-4">
+            <div class="card border-0 shadow-hover">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-gradient-primary rounded-circle p-3 me-3">
+                            <i class="fas fa-user-tie text-white"></i>
+                        </div>
+                        <div>
+                            <h5 class="card-title text-secondary mb-0">{{ owners|length }}</h5>
+                            <p class="card-text text-muted mb-0">Total Owners</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6 col-md-6 mb-4">
+            <div class="card border-0 shadow-hover">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-gradient-success rounded-circle p-3 me-3">
+                            <i class="fas fa-home text-white"></i>
+                        </div>
+                        <div>
+                            <h5 class="card-title text-secondary mb-0">{{ total_properties }}</h5>
+                            <p class="card-text text-muted mb-0">Total Properties</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if owners %}
+    <!-- Search Bar -->
+    <div class="input-group mb-2" style="max-width: 600px; margin: 0 auto;">
+        <span class="input-group-text bg-transparent border-end-0">
+            <i class="fas fa-search text-muted"></i>
+        </span>
+        <input type="text" class="form-control border-start-0" id="ownerSearchInput" placeholder="Search owners...">
+    </div>
+
+
+    <!-- Owners Table -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-items-center mb-0" id="ownersTable">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th class="ps-4 text-uppercase text-secondary text-xs font-weight-bolder">S.No.</th>
+                                    <th class="text-uppercase text-secondary text-xs font-weight-bolder">Owner Code</th>
+                                    <th class="text-uppercase text-secondary text-xs font-weight-bolder">Owner Name</th>
+                                    <th class="text-uppercase text-secondary text-xs font-weight-bolder">Email</th>
+                                    <th class="text-uppercase text-secondary text-xs font-weight-bolder">Phone</th>
+                                    <th class="text-uppercase text-secondary text-xs font-weight-bolder">Joined Date
+                                    </th>
+                                    <th class="text-uppercase text-secondary text-xs font-weight-bolder pe-4">Actions
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for owner in owners %}
+                                <tr>
+                                    <td class="ps-4">
+                                        <span class="text-dark text-sm">{{ loop.index }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="text-dark text-sm fw-bold">{{ owner.owner_code }}</span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="bg-gradient-primary rounded-circle me-2"
+                                                style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
+                                                <i class="fas fa-user-tie text-white" style="font-size: 14px;"></i>
+                                            </div>
+                                            <span class="text-dark text-sm">{{ owner.name }}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="text-dark text-sm">{{ owner.email }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="text-dark text-sm">{{ owner.phone }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="text-dark text-sm">{{ owner.created_at.strftime('%d-%m-%Y')
+                                            }}</span>
+                                    </td>
+                                    <td class="pe-4">
+                                        <div class="d-flex gap-2">
+                                            <!-- View Button -->
+                                            <button class="btn btn-sm btn-info text-white" data-bs-toggle="modal"
+                                                data-bs-target="#ownerModal{{ owner.id }}">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+
+                                            <a href="{{ url_for('admin_edit_owner', owner_id=owner.id) }}"
+                                                class="btn btn-sm btn-warning text-white">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a href="{{ url_for('admin_delete_owner', owner_id=owner.id) }}"
+                                                class="btn btn-sm btn-danger"
+                                                onclick="return confirm('Are you sure you want to delete this owner? This action cannot be undone.');">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <!-- No Owners Found -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow">
+                <div class="card-body p-5 text-center">
+                    <div class="bg-gradient-light rounded-circle p-4 d-inline-block mb-3">
+                        <i class="fas fa-user-tie fa-3x text-muted"></i>
+                    </div>
+                    <h4 class="text-muted">No Property Owners Found</h4>
+                    <p class="text-muted mb-4">There are no property owners registered in the system yet.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Back to Dashboard -->
+    <div class="row mt-4">
+        <div class="col-12 text-center">
+            <a href="{{ url_for('admin_dashboard') }}" class="btn bg-gradient-secondary mb-0">
+                <i class="fas fa-arrow-left me-2"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Modals for Owner Details -->
+{% for owner in owners %}
+<div class="modal fade" id="ownerModal{{ owner.id }}" tabindex="-1" aria-labelledby="ownerModalLabel{{ owner.id }}"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="ownerModalLabel{{ owner.id }}">
+                    <i class="fas fa-user-tie me-2"></i>Owner Details - {{ owner.name }}
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <p><strong><i class="fas fa-id-card me-2 text-primary"></i>Owner Code:</strong> {{
+                            owner.owner_code }}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <p><strong><i class="fas fa-user me-2 text-primary"></i>Name:</strong> {{ owner.name }}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <p><strong><i class="fas fa-envelope me-2 text-primary"></i>Email:</strong> {{ owner.email }}
+                        </p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <p><strong><i class="fas fa-phone me-2 text-primary"></i>Phone:</strong> {{ owner.phone }}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <p><strong><i class="fas fa-birthday-cake me-2 text-primary"></i>DOB:</strong> {{ owner.dob }}
+                        </p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <p><strong><i class="fas fa-map-marker-alt me-2 text-primary"></i>Address:</strong> {{
+                            owner.address }}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <p><strong><i class="fas fa-id-card me-2 text-primary"></i>ID Type:</strong> {{ owner.id_type }}
+                        </p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <p><strong><i class="fas fa-id-badge me-2 text-primary"></i>ID Number:</strong> {{
+                            owner.id_number }}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <p><strong><i class="fas fa-home me-2 text-primary"></i>Total Properties:</strong> {{
+                            owner.properties|length }}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <p><strong><i class="fas fa-calendar-alt me-2 text-primary"></i>Joined Date:</strong> {{
+                            owner.created_at.strftime('%d-%m-%Y') }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<style>
+    .bg-gradient-primary {
+        background: linear-gradient(87.4deg, #4e54c8 0%, #8f94fb 100%) !important;
+    }
+
+    .bg-gradient-success {
+        background: linear-gradient(87.4deg, #42e695 0%, #3bb2b8 100%) !important;
+    }
+
+    .bg-gradient-info {
+        background: linear-gradient(87.4deg, #4b6cb7 0%, #182848 100%) !important;
+    }
+
+    .bg-gradient-warning {
+        background: linear-gradient(87.4deg, #f46b45 0%, #eea849 100%) !important;
+    }
+
+    .bg-gradient-secondary {
+        background: linear-gradient(87.4deg, #7579ff 0%, #b224ef 100%) !important;
+    }
+
+    .bg-gradient-light {
+        background: linear-gradient(87.4deg, #f8f9fa 0%, #e9ecef 100%) !important;
+    }
+
+    .icon-shape {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 60px;
+        height: 60px;
+    }
+
+    .shadow-hover {
+        transition: all 0.3s ease;
+    }
+
+    .shadow-hover:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .card {
+        border-radius: 16px;
+        overflow: hidden;
+    }
+
+    .table th {
+        border-top: none;
+        font-size: 0.85rem;
+        padding: 1rem 0.5rem;
+    }
+
+    .table td {
+        padding: 1rem 0.5rem;
+        vertical-align: middle;
+    }
+
+    .btn {
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        border: none;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .badge {
+        border-radius: 12px;
+        font-weight: 500;
+    }
+
+    .modal-content {
+        border-radius: 16px;
+        overflow: hidden;
+    }
+
+    .modal-header {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    @media (max-width: 768px) {
+        .d-flex.flex-md-row {
+            flex-direction: column !important;
+            text-align: center;
+        }
+
+        .icon-shape {
+            margin: 0 auto 1rem !important;
+        }
+
+        .d-flex.gap-2 {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .modal-dialog {
+            margin: 0.5rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .pagination {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .table-responsive {
+            border-radius: 12px;
+        }
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('ownerSearchInput');
+    const table = document.getElementById('ownersTable');
+    const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+    searchInput.addEventListener('keyup', function() {
+        const filter = searchInput.value.toLowerCase();
+
+        for (let i = 0; i < rows.length; i++) {
+            const cells = rows[i].getElementsByTagName('td');
+            let found = false;
+
+            for (let j = 0; j < cells.length - 1; j++) { // exclude actions column
+                if (cells[j].textContent.toLowerCase().indexOf(filter) > -1) {
+                    found = true;
+                    break;
+                }
+            }
+
+            rows[i].style.display = found ? '' : 'none';
+        }
+    });
+});
+</script>
+{% endblock %}

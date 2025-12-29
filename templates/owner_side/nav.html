@@ -1,0 +1,310 @@
+<!-- Dashboard Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark owner-navbar">
+    <div class="container-fluid">
+        <!-- Brand & Toggler -->
+        <a class="navbar-brand" href="{{ url_for('owner_dashboard') }}">
+            <i class="fas fa-hotel me-2"></i>LuxStay <span class="badge bg-warning ms-2">Owner</span>
+        </a>
+        
+        <!-- Mobile Toggler -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#ownerNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <!-- Navbar Content -->
+        <div class="collapse navbar-collapse" id="ownerNavbar">
+            <!-- Main Navigation -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="propertiesDropdown" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-building me-1"></i> Properties
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{{ url_for('owner_properties') }}"><i class="fas fa-list me-2"></i>All Properties</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('add_property') }}"><i class="fas fa-plus-circle me-2"></i>Add New</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{{ url_for('property_analytics') }}"><i class="fas fa-chart-line me-2"></i>Analytics</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="bookingsDropdown" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-calendar-check me-1"></i> Bookings
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{{ url_for('owner_bookings') }}"><i class="fas fa-list me-2"></i>All Bookings</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('upcoming_bookings') }}"><i class="fas fa-clock me-2"></i>Upcoming</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{{ url_for('booking_reports') }}"><i class="fas fa-file-alt me-2"></i>Reports</a></li>
+                    </ul>
+                </li>
+                
+                
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="reviewsDropdown" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-star me-1"></i> Reviews
+                        <span id="totalReviewsBadge" class="badge bg-success ms-1">0</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item" href="{{ url_for('property_reviews') }}">
+                                <i class="fas fa-inbox me-2"></i>All Reviews
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ url_for('new_reviews') }}">
+                                <i class="fas fa-flag me-2"></i>New
+                                <span id="newReviewsBadge" class="badge bg-danger ms-2">0</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>
+            
+            <!-- Right Side Navigation -->
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle notification-bell" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-bell"></i>
+                        <span class="position-absolute top-10 start-90 translate-middle p-1 bg-danger border border-light rounded-circle">
+                            <span class="visually-hidden">New alerts</span>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end notification-dropdown" id="ownerNotifications">
+                        <li>
+                            <h6 class="dropdown-header">Notifications (<span id="notifCount">0</span>)</h6>
+                        </li>
+                        <li id="latestBooking">
+                            <a class="dropdown-item text-muted" href="{{ url_for('owner_bookings_notifications', filter_type='booking') }}">
+                                <i class="fas fa-calendar-check text-primary me-2"></i>No new booking
+                            </a>
+                        </li>
+                        <li id="latestReview">
+                            <a class="dropdown-item text-muted" href="{{ url_for('new_reviews') }}">
+                                <i class="fas fa-star text-warning me-2"></i>No new review
+                            </a>
+                        </li>
+
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item text-center" href="{{ url_for('owner_all_notifications', filter_type='all') }}">View All</a></li>
+                    </ul>
+
+                </li>
+                
+                <li class="nav-item dropdown ms-2">
+                    <a class="nav-link dropdown-toggle user-menu" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                        <img src="{{ url_for('static', filename='profiles_pictures/owner_profile_pic/' + owner_profile_pic) if owner_profile_pic else url_for('static', filename='images/admin_avtar.jpg') }}" class="rounded-circle me-1" width="30" height="30">
+                        <span class="d-none d-lg-inline">{{owner_name}}</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="{{ url_for('owner_profile') }}"><i class="fas fa-user-circle me-2"></i>Profile</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('owner_settings') }}"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{{ url_for('help_and_support') }}"><i class="fas fa-question-circle me-2"></i>Help Center</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<style>
+    /* Owner Navbar Styling */
+    .owner-navbar {
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 0.5rem 1rem;
+    }
+    
+    .navbar-brand {
+        font-weight: 600;
+        font-size: 1.3rem;
+        padding: 0.5rem 0;
+    }
+    
+    .nav-link {
+        font-weight: 500;
+        padding: 0.8rem 1rem;
+        border-radius: 4px;
+        margin: 0 2px;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+    }
+    
+    .nav-link:hover, .nav-link:focus {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .nav-link.active {
+        background-color: rgba(255, 255, 255, 0.2);
+        font-weight: 600;
+    }
+    
+    /* Dropdown Styling */
+    .dropdown-menu {
+        border: none;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        margin-top: 5px;
+    }
+    
+    .dropdown-item {
+        padding: 0.5rem 1.5rem;
+        transition: all 0.2s;
+    }
+    
+    .dropdown-item:hover {
+        background-color: #f8f9fa;
+        padding-left: 1.7rem;
+    }
+    
+    .dropdown-divider {
+        margin: 0.3rem 0;
+    }
+    
+    /* Notification Bell */
+    .notification-bell {
+        position: relative;
+    }
+    
+    .notification-dropdown {
+        width: 320px;
+        padding: 0;
+    }
+    
+    .notification-dropdown .dropdown-item {
+        white-space: normal;
+        padding: 0.75rem 1.5rem;
+        border-bottom: 1px solid #f1f1f1;
+    }
+    
+    /* User Menu */
+    .user-menu img {
+        transition: all 0.3s ease;
+    }
+    
+    .user-menu:hover img {
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+    }
+    
+    /* Badges */
+    .badge {
+        font-weight: 500;
+        font-size: 0.65rem;
+        padding: 0.35em 0.5em;
+    }
+    
+    /* Mobile View */
+    @media (max-width: 992px) {
+        .navbar-collapse {
+            background: linear-gradient(135deg, #1a3361 0%, #22468a 100%);
+            padding: 1rem;
+            border-radius: 0 0 10px 10px;
+            margin-top: 10px;
+        }
+        
+        .nav-link {
+            margin: 2px 0;
+            padding: 0.75rem 1rem;
+        }
+        
+        .dropdown-menu {
+            box-shadow: none;
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+        
+        .dropdown-item {
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .dropdown-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Highlight active nav item
+    const currentPage = window.location.pathname;
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    navLinks.forEach(link => {
+        if (link.href && currentPage.includes(new URL(link.href).pathname)) {
+            link.classList.add('active');
+            let parent = link.closest('.dropdown-menu');
+            if (parent) {
+                const dropdownToggle = parent.previousElementSibling;
+                if (dropdownToggle && dropdownToggle.classList.contains('dropdown-toggle')) {
+                    dropdownToggle.classList.add('active');
+                }
+            }
+        }
+    });
+
+    // Initialize tooltips
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+
+    // Fetch latest notifications dynamically
+    fetch("{{ url_for('owner_latest_updates') }}")
+        .then(response => response.json())
+        .then(data => {
+            // Update notification count
+            const notifCountEl = document.getElementById("notifCount");
+            if (notifCountEl) notifCountEl.textContent = data.unread_count;
+
+            // Update latest booking
+            const bookingEl = document.getElementById("latestBooking");
+            if (bookingEl) {
+                if (data.latest_booking) {
+                    bookingEl.innerHTML = `
+                        <a class="dropdown-item" href="{{ url_for('owner_bookings_notifications', filter_type='booking') }}">
+                            <i class="fas fa-calendar-check text-primary me-2"></i>
+                            New booking #${data.latest_booking.booking_code} (${data.latest_booking.property})
+                        </a>`;
+                } else {
+                    bookingEl.innerHTML = `
+                        <a class="dropdown-item text-muted" href="{{ url_for('owner_bookings_notifications', filter_type='booking') }}">
+                            <i class="fas fa-calendar-check text-primary me-2"></i>No new booking
+                        </a>`;
+                }
+            }
+
+            // Update latest review
+            const reviewEl = document.getElementById("latestReview");
+            if (reviewEl) {
+                if (data.latest_review) {
+                    reviewEl.innerHTML = `
+                        <a class="dropdown-item" href="{{ url_for('new_reviews') }}">
+                            <i class="fas fa-star text-warning me-2"></i>
+                            New review for ${data.latest_review.property} (⭐${data.latest_review.rating})
+                        </a>`;
+                } else {
+                    reviewEl.innerHTML = `
+                        <a class="dropdown-item text-muted" href="{{ url_for('new_reviews') }}">
+                            <i class="fas fa-star text-warning me-2"></i>No new review
+                        </a>`;
+                }
+            }
+
+            // Update reviews badge in dropdown
+            const totalReviewsBadge = document.getElementById("totalReviewsBadge");
+            const newReviewsBadge = document.getElementById("newReviewsBadge");
+
+            if (totalReviewsBadge) totalReviewsBadge.textContent = data.total_reviews || 0;
+            if (newReviewsBadge) newReviewsBadge.textContent = data.latest_review ? 5 : 0;
+        })
+        .catch(error => console.error("Error fetching notifications:", error));
+});
+</script>
+
+

@@ -1,0 +1,968 @@
+{% extends 'user_side/index.html' %}
+
+{% block title %}{{ property.property_name }} | LuxStay{% endblock %}
+
+{% block content %}
+<div class="property-detail-container">
+    <!-- Property Header Section -->
+    <section class="card property-header mt-2">
+        <div class="property-title ms-4">
+            <h1>{{ property.property_name }}</h1>
+            <div class="property-location text-dark">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>{{ property.street_address }}, {{ property.city }}, {{ property.country }}</span>
+            </div>
+            <div class="property-meta">
+                <span><i class="fas fa-star"></i> 4.8 (24 reviews)</span>
+                <span><i class="fas fa-home"></i> {{ property.property_type }}</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Center wrapper -->
+    <div class="d-flex justify-content-center mt-3">
+        <div id="carouselExampleIndicators" class="carousel slide w-50" data-bs-ride="carousel">
+    
+            <!-- Indicators -->
+            <ol class="carousel-indicators">
+                {% for photo in property.property_photos.split(',') if photo.strip() %}
+                <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{ loop.index0 }}"
+                    class="{% if loop.first %}active{% endif %}"></li>
+                {% endfor %}
+            </ol>
+    
+            <!-- Carousel images -->
+            <div class="carousel-inner">
+                {% for photo in property.property_photos.split(',') if photo.strip() %}
+                <div class="carousel-item {% if loop.first %}active{% endif %}">
+                    <img src="/{{ photo.strip() }}" class="d-block w-100 carousel-image"
+                        alt="Property image {{ loop.index }}">
+                </div>
+                {% else %}
+                <div class="carousel-item active">
+                    <img src="https://via.placeholder.com/800x500?text=LuxStay" class="d-block w-100 carousel-image"
+                        alt="Placeholder Image">
+                </div>
+                {% endfor %}
+            </div>
+    
+            <!-- Controls -->
+            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </a>
+    
+        </div>
+    </div>
+
+    <!-- Property Details Section -->
+     <div class="d-flex justify-content-center">
+        <section class="property-details-section">
+            <div class="details-container">
+
+                <!-- Booking Widget -->
+                <div class="booking-widget">
+                    <div class="booking-card">
+                        <h3>Select Your Room</h3>
+
+                        <!-- Room Selection Form -->
+                        <form method="GET" action="{{ url_for('book_property', property_id=property.id, room_id=0) }}"
+                            onsubmit="this.action = this.action.replace('/0', '/' + this.room_id.value);">
+
+                            <div class="form-group">
+                                <label for="check_in">Check-in</label>
+                                <input type="date" id="check_in" name="check_in" class="form-control" value="{{check_in}}"
+                                    required>
+                            </div>
+                            <div class="form-group">
+                                <label for="check_out">Check-out</label>
+                                <input type="date" id="check_out" name="check_out" class="form-control"
+                                    value="{{check_out}}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="guests">Guests</label>
+                                <select name="guests">
+                                    {% for i in range(1, 6) %}
+                                    <!-- <option value="{{ i }}" {{ selected if i==guests else '' }}>{{ i }}</option> -->
+                                    <option value="{{ i }}" {% if i == guests %}selected{% endif %}>{{ i }}</option>
+
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <!-- Room Selection -->
+                            <div class="room-selection">
+                                <h4>Available Rooms</h4>
+                                {% if rooms %}
+                                <div class="room-options d-flex justify-content-center">
+                                    {% for room in rooms %}
+                                    
+                                    <div class="room-option">
+                                        <input type="radio" id="room_{{ room.id }}" name="room_id" value="{{ room.id }}"
+                                            required>
+                                        <label for="room_{{ room.id }}">
+                                            <!-- Room Image Carousel (4x5 aspect ratio) -->
+                                            <div class="room-carousel">
+                                                {% set room_images = room.image_url.split(',') if room.image_url else
+                                                ['https://via.placeholder.com/400x500?text=Room+Image'] %}
+                                                <div class="carousel-container">
+                                                    {% for image in room_images %}
+                                                    <div class="carousel-slide {% if loop.first %}active{% endif %}">
+                                                        <img src="/{{ image }}" alt="Room image {{ loop.index }}"
+                                                            class="room-image">
+                                                    </div>
+                                                    {% endfor %}
+                                                    {% if room_images|length > 1 %}
+                                                    <button class="carousel-prev" type="button">❮</button>
+                                                    <button class="carousel-next" type="button">❯</button>
+                                                    {% endif %}
+                                                </div>
+                                                {% if room_images|length > 1 %}
+                                                <div class="carousel-dots">
+                                                    {% for image in room_images %}
+                                                    <span class="dot {% if loop.first %}active{% endif %}"
+                                                        data-index="{{ loop.index0 }}"></span>
+                                                    {% endfor %}
+                                                </div>
+                                                {% endif %}
+                                            </div>
+
+                                            <!-- Room Details -->
+                                            <div class="room-details">
+                                                <div class="room-header">
+                                                    <h5>{{ room.room_type }}</h5>
+                                                    <div class="room-price">
+                                                        <span class="price">${{ room.price_per_night }}</span>
+                                                        <span class="per-night">/ night</span>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Room Description -->
+                                                <p class="room-description">{{ room.description }}</p>
+
+                                                <!-- Room Specifications -->
+                                                <div class="room-specs">
+                                                    <div class="spec-item">
+                                                        <i class="fas fa-bed"></i>
+                                                        <span>{{ room.bed_type }}</span>
+                                                    </div>
+                                                    <div class="spec-item">
+                                                        <i class="fas fa-ruler-combined"></i>
+                                                        <span>{{ room.room_size }} sqft</span>
+                                                    </div>
+                                                    <div class="spec-item">
+                                                        <i class="fas fa-users"></i>
+                                                        <span>{{ room.capacity }} guest{% if room.capacity > 1 %}s{% endif
+                                                            %}</span>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Room Amenities -->
+                                                {% if room.amenities %}
+                                                <div class="room-amenities">
+                                                    <h6>Room Amenities:</h6>
+                                                    <div class="amenities-grid">
+                                                        {% for amenity in room.amenities.split(',') %}
+                                                        <div class="amenity-item">
+                                                            <i class="fas fa-check-circle"></i>
+                                                            <span>{{ amenity }}</span>
+                                                        </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                                {% endif %}
+                                                
+                                            </div>
+                                            
+                                        </label> <br>
+                                        {% if room.capacity < guests %} <div>
+                                                <p class="text-danger">Room {{ room.room_number }} is not suitable for {{ guests }}
+                                                    guests.</p>
+                                                </div>
+                                            
+                                            {% endif %}
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                {% else %}
+                                <p class="no-rooms">No rooms currently available</p>
+                                {% endif %}
+                            </div>
+                            {% if rooms %}
+                            <div>
+                                <button type="submit" class="book-now-btn">Book Now</button>
+                            </div>
+                            {% endif %}
+
+                            
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Property Location Section -->
+    <section class="location-section">
+        <h2>Location</h2>
+        <div class="location-details">
+            <p><i class="fas fa-map-pin"></i> {{ property.street_address }}, {{ property.city }}, {{ property.country }}
+            </p>
+            {% if property.nearby %}
+            <div class="nearby-places">
+                <h4>Nearby Places:</h4>
+                <ul>
+                    {% for place in property.nearby.split(',') %}
+                    <li>{{ place }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section class="reviews-section">
+        <h2>Guest Reviews</h2>
+        <div class="reviews-container">
+            <!-- Sample review - in a real app you would loop through actual reviews -->
+            <div class="review-card">
+                <div class="review-header">
+                    <div class="reviewer">
+                        <div class="avatar">JD</div>
+                        <div class="reviewer-info">
+                            <h5>John Doe</h5>
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="review-date">March 2023</div>
+                </div>
+                <div class="review-content">
+                    <p>Fantastic property with excellent amenities. The location was perfect and the staff were very
+                        helpful. Would definitely stay here again!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+<style>
+    :root {
+        --primary: #0F2C59;
+        --secondary: #D4AF37;
+        --light: #f8f9fa;
+        --dark: #212529;
+        --gray: #6c757d;
+        --light-gray: #e9ecef;
+    }
+
+    /* Base Styles */
+    .property-detail-container {
+        font-family: 'Montserrat', sans-serif;
+        color: var(--dark);
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 1rem;
+    }
+
+    /* Property Header */
+    .property-header {
+        padding: 2rem 0;
+        border-bottom: 1px solid var(--light-gray);
+        background: rgba(135, 147, 235, 0.653);
+    }
+
+    .property-title h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+        color: var(--primary);
+    }
+
+    .property-location {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--gray);
+        margin-bottom: 1rem;
+    }
+
+    .property-location i {
+        color: var(--secondary);
+    }
+
+    .property-meta {
+        display: flex;
+        gap: 1.5rem;
+        margin-top: 1rem;
+    }
+
+    .property-meta span {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .property-meta i {
+        color: var(--secondary);
+    }
+
+    /* Property Gallery */
+    .property-gallery {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 1rem;
+        height: 500px;
+        margin: 5rem 0;
+    }
+
+    .carousel-image {
+    height: 400px;
+    object-fit: cover;
+    }
+
+    .thumbnail-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+
+    .thumbnail {
+        height: calc(50% - 0.5rem);
+    }
+
+    .thumbnail img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    /* Property Details Section */
+    .property-details-section {
+        gap: 2rem;
+        margin: 3rem 0;
+    }
+
+    .main-details h2 {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+        color: var(--primary);
+    }
+
+    .full-description {
+        line-height: 1.6;
+        margin-bottom: 2rem;
+    }
+
+    .amenities-section h3 {
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
+        color: var(--primary);
+    }
+
+    .amenities-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .amenity-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .amenity-item i {
+        color: var(--secondary);
+    }
+
+    /* Booking Widget */
+    .booking-widget {
+        position: sticky;
+        top: 1rem;
+    }
+
+    .booking-card {
+        background: white;
+        border-radius: 10px;
+        padding: 1.5rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .booking-card h3 {
+        font-size: 1.4rem;
+        margin-bottom: 1.5rem;
+        color: var(--primary);
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid var(--light-gray);
+        border-radius: 6px;
+        font-size: 1rem;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--secondary);
+    }
+
+    /* Room Selection Styles */
+    .room-selection {
+        margin: 2rem 0;
+    }
+
+    .room-selection h4 {
+        font-size: 1.4rem;
+        color: var(--primary);
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid var(--light-gray);
+    }
+
+    .room-options {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .room-option {
+        position: relative;
+    }
+
+    .room-option input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+    }
+
+    .room-option label {
+        display: block;
+        border: 1px solid var(--light-gray);
+        border-radius: 10px;
+        overflow: hidden;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .room-option input[type="radio"]:checked+label {
+        border-color: var(--secondary);
+        box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.3);
+    }
+
+    /* Room Carousel */
+    .room-carousel {
+        position: relative;
+        width: 50%;
+        height: 50%;
+        padding-bottom: 50%;
+        /* 4x5 aspect ratio (5/4 = 1.25) */
+        overflow: hidden;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        margin-bottom: 1rem;
+        margin-left: 25%;
+        background: var(--light-gray);
+    }
+
+    .carousel-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .carousel-slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+    }
+
+    .carousel-slide.active {
+        opacity: 1;
+    }
+
+    .room-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .carousel-prev,
+    .carousel-next {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
+        cursor: pointer;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .carousel-prev {
+        left: 15px;
+    }
+
+    .carousel-next {
+        right: 15px;
+    }
+
+    .carousel-dots {
+        position: absolute;
+        bottom: 15px;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        z-index: 10;
+    }
+
+    .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .dot.active {
+        background: white;
+    }
+
+    /* Room Details */
+    .room-details {
+        padding: 1.5rem;
+    }
+
+    .room-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .room-header h5 {
+        font-size: 1.2rem;
+        color: var(--primary);
+        margin: 0;
+    }
+
+    .room-price {
+        text-align: right;
+    }
+
+    .room-price .price {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--secondary);
+    }
+
+    .room-price .per-night {
+        font-size: 0.9rem;
+        color: var(--gray);
+    }
+
+    .room-description {
+        color: var(--gray);
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Room Specifications */
+    .room-specs {
+        display: flex;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .spec-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--gray);
+    }
+
+    .spec-item i {
+        color: var(--secondary);
+    }
+
+    /* Room Amenities */
+    .room-amenities {
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--light-gray);
+    }
+
+    .room-amenities h6 {
+        font-size: 1rem;
+        color: var(--primary);
+        margin-bottom: 1rem;
+    }
+
+    .amenities-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 0.8rem;
+    }
+
+    .amenity-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .amenity-item i {
+        color: var(--secondary);
+        font-size: 0.8rem;
+    }
+
+    /* Responsive Design */
+    @media (min-width: 768px) {
+        .room-options {
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+        }
+    }
+
+    @media (max-width: 576px) {
+        .amenities-grid {
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        }
+
+        .room-specs {
+            gap: 1rem;
+        }
+    }
+
+    /* Book Now Button */
+    .book-now-btn {
+        width: 100%;
+        padding: 1rem;
+        background: var(--secondary);
+        color: var(--primary);
+        border: none;
+        border-radius: 6px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .book-now-btn:hover {
+        background: #e8c547;
+    }
+
+    /* Location Section */
+    .location-section {
+        margin: 3rem 0;
+        padding: 2rem 0;
+        border-top: 1px solid var(--light-gray);
+        border-bottom: 1px solid var(--light-gray);
+    }
+
+    .location-section h2 {
+        font-size: 1.8rem;
+        margin-bottom: 1.5rem;
+        color: var(--primary);
+    }
+
+    .location-details p {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .location-details i {
+        color: var(--secondary);
+    }
+
+    .nearby-places h4 {
+        font-size: 1.2rem;
+        margin: 1.5rem 0 0.5rem;
+        color: var(--primary);
+    }
+
+    .nearby-places ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+
+    .nearby-places li {
+        margin-bottom: 0.5rem;
+        padding-left: 1.5rem;
+        position: relative;
+    }
+
+    .nearby-places li:before {
+        content: "•";
+        color: var(--secondary);
+        position: absolute;
+        left: 0;
+    }
+
+    .map-container {
+        margin: 2rem 0;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .property-map {
+        height: 300px;
+        width: 100%;
+        border: none;
+    }
+
+    .map-caption {
+        padding: 0.8rem;
+        background: #f8f9fa;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+        color: #555;
+    }
+
+    .map-caption i {
+        color: #D4AF37;
+    }
+
+    @media (max-width: 768px) {
+        .property-map {
+            height: 250px;
+        }
+    }
+
+    /* Reviews Section */
+    .reviews-section {
+        margin: 3rem 0;
+    }
+
+    .reviews-section h2 {
+        font-size: 1.8rem;
+        margin-bottom: 1.5rem;
+        color: var(--primary);
+    }
+
+    .review-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        margin-bottom: 1.5rem;
+    }
+
+    .review-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .reviewer {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .avatar {
+        width: 40px;
+        height: 40px;
+        background: var(--secondary);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+    }
+
+    .reviewer-info h5 {
+        margin-bottom: 0.2rem;
+    }
+
+    .rating {
+        color: var(--secondary);
+    }
+
+    .review-date {
+        color: var(--gray);
+        font-size: 0.9rem;
+    }
+
+    .review-content p {
+        line-height: 1.6;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 992px) {
+        .property-gallery {
+            grid-template-columns: 1fr;
+            height: auto;
+        }
+
+        .thumbnail-grid {
+            display: none;
+        }
+
+        .property-details-section {
+            grid-template-columns: 1fr;
+        }
+
+        .booking-widget {
+            position: static;
+            margin-top: 2rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .property-title h1 {
+            font-size: 2rem;
+        }
+
+        .amenities-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .property-meta {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .property-header {
+            padding: 1.5rem 0;
+        }
+
+        .property-title h1 {
+            font-size: 1.8rem;
+        }
+
+        .booking-card {
+            padding: 1rem;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Set minimum dates for check-in/check-out
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('check_in').min = today;
+        document.getElementById('check_out').min = today;
+
+        // Update check-out min date when check-in changes
+        document.getElementById('check_in').addEventListener('change', function () {
+            document.getElementById('check_out').min = this.value;
+        });
+
+        // Simple image gallery functionality
+        const mainImage = document.querySelector('.main-image img');
+        const thumbnails = document.querySelectorAll('.thumbnail img');
+
+        thumbnails.forEach(thumbnail => {
+            thumbnail.addEventListener('click', function () {
+                mainImage.src = this.src;
+            });
+        });
+
+        // Initialize all carousels
+        document.querySelectorAll('.room-carousel').forEach(carousel => {
+            const container = carousel.querySelector('.carousel-container');
+            const slides = carousel.querySelectorAll('.carousel-slide');
+            const dots = carousel.querySelectorAll('.dot');
+            let currentIndex = 0;
+
+            // Only initialize if there are multiple slides
+            if (slides.length > 1) {
+                const prevBtn = carousel.querySelector('.carousel-prev');
+                const nextBtn = carousel.querySelector('.carousel-next');
+
+                // Show initial slide
+                showSlide(currentIndex);
+
+                // Navigation functions
+                function showSlide(index) {
+                    slides.forEach(slide => slide.classList.remove('active'));
+                    dots.forEach(dot => dot.classList.remove('active'));
+
+                    slides[index].classList.add('active');
+                    dots[index].classList.add('active');
+                    currentIndex = index;
+                }
+
+                function nextSlide() {
+                    let newIndex = (currentIndex + 1) % slides.length;
+                    showSlide(newIndex);
+                }
+
+                function prevSlide() {
+                    let newIndex = (currentIndex - 1 + slides.length) % slides.length;
+                    showSlide(newIndex);
+                }
+
+                // Event listeners
+                nextBtn.addEventListener('click', nextSlide);
+                prevBtn.addEventListener('click', prevSlide);
+
+                // Dot navigation
+                dots.forEach(dot => {
+                    dot.addEventListener('click', function () {
+                        showSlide(parseInt(this.dataset.index));
+                    });
+                });
+
+                // Auto-rotate (optional)
+                let slideInterval = setInterval(nextSlide, 5000);
+
+                // Pause on hover
+                container.addEventListener('mouseenter', () => clearInterval(slideInterval));
+                container.addEventListener('mouseleave', () => {
+                    slideInterval = setInterval(nextSlide, 5000);
+                });
+            }
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,596 @@
+{% extends 'owner_side/index.html' %}
+{% block title %}Owner Dashboard{% endblock %}
+
+{% block content %}
+<!-- Dashboard Hero Section -->
+<div class="dashboard-hero position-relative overflow-hidden">
+    <div class="container py-5">
+        <div class="row align-items-center py-5">
+            <div class="col-lg-6 text-white">
+                <h1 class="display-4 fw-bold mb-3 animate__animated animate__fadeInDown">Welcome Back, <span class="text-warning">{{user_name}}</span></h1>
+                <p class="lead mb-4 animate__animated animate__fadeIn animate__delay-1s">Here's what's happening with your properties today</p>
+                <div class="d-flex gap-3 animate__animated animate__fadeIn animate__delay-2s">
+                    <a href="{{ url_for('add_property') }}" class="btn btn-light btn-lg px-4">
+                        <i class="fas fa-plus-circle me-2"></i> Add Property
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 d-none d-lg-block animate__animated animate__fadeIn">
+                <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                     alt="Luxury Hotel" 
+                     class="img-fluid rounded-4 shadow-lg floating-img">
+            </div>
+        </div>
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-pattern"></div>
+</div>
+
+<!-- Dashboard Stats Section -->
+<div class="container py-5">
+    <div class="row g-4 mb-5">
+        <!-- Stat Card 1 -->
+        <div class="col-md-6 col-lg-3 animate__animated animate__fadeInUp">
+            <div class="stat-card bg-primary bg-opacity-10 rounded-4 p-4 h-100">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h6 class="text-uppercase text-muted mb-2">Total Properties</h6>
+                        <h2 class="fw-bold mb-0">{{ total_properties }}</h2>
+                    </div>
+                    <div class="icon-box bg-primary bg-opacity-25 text-primary rounded-circle p-3">
+                        <i class="fas fa-hotel fa-lg"></i>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <span class="badge bg-primary bg-opacity-25 text-primary">
+                        <i class="fas fa-arrow-up me-1"></i> 2 new this month
+                    </span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Stat Card 2 -->
+        <div class="col-md-6 col-lg-3 animate__animated animate__fadeInUp animate__delay-1s">
+            <div class="stat-card bg-success bg-opacity-10 rounded-4 p-4 h-100">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h6 class="text-uppercase text-muted mb-2">Today's Bookings</h6>
+                        <h2 class="fw-bold mb-0">{{ today_bookings }}</h2>
+                    </div>
+                    <div class="icon-box bg-success bg-opacity-25 text-success rounded-circle p-3">
+                        <i class="fas fa-calendar-check fa-lg"></i>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <span class="badge bg-success bg-opacity-25 text-success">
+                        <i class="fas fa-clock me-1"></i> 3 check-ins
+                    </span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Stat Card 3 -->
+        <div class="col-md-6 col-lg-3 animate__animated animate__fadeInUp animate__delay-2s">
+            <div class="stat-card bg-warning bg-opacity-10 rounded-4 p-4 h-100">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h6 class="text-uppercase text-muted mb-2">Monthly Revenue</h6>
+                        <h2 class="fw-bold mb-0">₹ {{ monthly_revenue }}</h2>
+                    </div>
+                    <div class="icon-box bg-warning bg-opacity-25 text-warning rounded-circle p-3">
+                        <i class="fas fa-money-bill-wave fa-lg"></i>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <span class="badge bg-warning bg-opacity-25 text-warning">
+                        <i class="fas fa-arrow-up me-1"></i> 12% from last month
+                    </span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Stat Card 4 -->
+        <div class="col-md-6 col-lg-3 animate__animated animate__fadeInUp animate__delay-3s">
+            <div class="stat-card bg-info bg-opacity-10 rounded-4 p-4 h-100">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h6 class="text-uppercase text-muted mb-2">New Reviews</h6>
+                        <h2 class="fw-bold mb-0">{{ new_reviews }}</h2>
+                    </div>
+                    <div class="icon-box bg-info bg-opacity-25 text-info rounded-circle p-3">
+                        <i class="fas fa-star fa-lg"></i>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <span class="badge bg-info bg-opacity-25 text-info">
+                        <i class="fas fa-smile me-1"></i> {{ average_rating }} avg rating
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Bookings & Properties Section -->
+    <div class="row g-4">
+        <!-- Recent Bookings -->
+        <div class="col-lg-7 animate__animated animate__fadeIn">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-0 py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0 fw-bold"><i class="fas fa-calendar-alt me-2 text-primary"></i> Recent Bookings</h5>
+                        <a href="{{ url_for('owner_bookings') }}" class="btn btn-sm btn-outline-primary">View All</a>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Guest</th>
+                                    <th>Property</th>
+                                    <th>Dates</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for booking in recent_bookings %}
+                                {% set days = (booking.end_date.date() - booking.start_date.date()).days %}
+                                {% set amount = days * booking.room.price_per_night %}
+                                <tr class="booking-row">
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            {% if booking.user.profile_picture %}
+                                            <img src="{{ url_for('static', filename='profiles_pictures/user_profile_pic/' ~ booking.user.profile_picture) }}"
+                                                class="rounded-circle me-2" width="30" height="30">
+                                            {% else %}
+                                            <div class="rounded-circle me-2 d-flex align-items-center justify-content-center bg-primary text-white fw-bold"
+                                                style="width:30px; height:30px; font-size:14px;">
+                                                {{ booking.user.first_name[0]|upper }}
+                                            </div>
+                                            {% endif %}
+                                            <span>{{ booking.user.name }}</span>
+                                        </div>
+                                    </td>
+                                    <td>{{ booking.property.property_name }}</td>
+                                    <td>{{ booking.start_date.strftime('%b %d') }} - {{ booking.end_date.strftime('%b %d')
+                                        }}</td>
+                                    <td>₹ {{ '%.2f' % amount }}</td>
+                                    <td>
+                                        {% if booking.status == 'Completed' %}
+                                        <span class="badge bg-success bg-opacity-10 text-success">Completed</span>
+                                        {% elif booking.status == 'Confirmed' %}
+                                        <span class="badge bg-primary bg-opacity-10 text-primary">Confirmed</span>
+                                        {% elif booking.status == 'Cancelled' %}
+                                        <span class="badge bg-warning bg-opacity-10 text-info">Cancelled</span>
+                                        {% else %}
+                                        <span class="badge bg-secondary bg-opacity-10 text-secondary">{{ booking.status
+                                            }}</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted">No recent bookings found.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+        <!-- Top Properties -->
+        <div class="col-lg-5 animate__animated animate__fadeIn">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-0 py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0 fw-bold"><i class="fas fa-chart-line me-2 text-primary"></i> Top Performing Properties</h5>
+                        <a href="{{ url_for('property_analytics') }}" class="btn btn-sm btn-outline-primary">View All</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% for prop, revenue in top_by_revenue %}
+                    <div class="property-card mb-3">
+                        <div class="row g-0">
+                            <div class="col-md-4 d-flex justify-content-center p-2">
+                                <img src="{{ prop.property_photos.split(',')[0] if prop.property_photos else 'https://via.placeholder.com/150' }}" 
+                                    class="img-fluid rounded-3 w-75 h-50 object-fit-cover" 
+                                    alt="{{ prop.property_name }}">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="p-3">
+                                    <h6 class="fw-bold mb-1">{{ prop.property_name }}</h6>
+
+                                    {# Average Rating #}
+                                    {% set ratings = [] %}
+                                    {% for r in prop.reviews %}
+                                        {% set _ = ratings.append(r.rating) %}
+                                    {% endfor %}
+
+                                    {% if ratings %}
+                                        {% set avg_rating = (ratings | sum / ratings|length) %}
+                                    {% else %}
+                                        {% set avg_rating = 0 %}
+                                    {% endif %}
+
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="text-warning small me-2">
+                                            {% set full_stars = avg_rating|int %}
+                                            {% set half_star = 1 if avg_rating - full_stars >= 0.5 else 0 %}
+                                            {% for i in range(full_stars) %}
+                                                <i class="fas fa-star"></i>
+                                            {% endfor %}
+                                            {% if half_star %}
+                                                <i class="fas fa-star-half-alt"></i>
+                                            {% endif %}
+                                            {% for i in range(5 - full_stars - half_star) %}
+                                                <i class="far fa-star"></i>
+                                            {% endfor %}
+                                        </div>
+                                        <small class="text-muted">{{ '%.1f' % avg_rating }} ({{ ratings|length }} reviews)</small>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <small class="text-muted d-block">Bookings</small>
+                                            <span class="fw-bold">{{ prop.bookings|length }}</span>
+                                        </div>
+                                        <div>
+                                            <small class="text-muted d-block">Revenue</small>
+                                            <span class="fw-bold">₹ {{ revenue }}</span>
+                                        </div>
+                                        <div>
+                                            <small class="text-muted d-block">Occupancy</small>
+                                            {% set total_rooms = prop.bedroom_count %}
+                                            {% set booked_rooms = prop.bookings|length %}
+                                            {% if total_rooms > 0 %}
+                                                {% set occupancy = (booked_rooms / total_rooms * 100)|round(0) %}
+                                            {% else %}
+                                                {% set occupancy = 0 %}
+                                            {% endif %}
+                                            <span class="fw-bold">{{ occupancy }}%</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <p class="text-muted text-center">No top properties found.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+    <!-- Recent Reviews & Calendar Section -->
+    <div class="row g-4 mt-4">
+        <!-- Recent Reviews -->
+        <div class="col-lg-5 animate__animated animate__fadeIn">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-0 py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0 fw-bold"><i class="fas fa-star me-2 text-primary"></i> Recent Reviews ({{ recent_reviews_details|length }})</h5>
+                        <a href="{{ url_for('property_reviews') }}" class="btn btn-sm btn-outline-primary">View All</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% for review in recent_reviews_details %}
+                    <div class="review-card mb-3">
+                        <div class="d-flex">
+                            <img src="{{ review.user.profile_picture if review.user.profile_picture else 'https://randomuser.me/api/portraits/lego/1.jpg' }}" 
+                                class="rounded-circle me-3" 
+                                width="50" 
+                                height="50">
+                            <div>
+                                <h6 class="mb-1">{{ review.user.name }}</h6>
+                                <div class="text-warning small mb-2">
+                                    {% for i in range(review.rating) %}
+                                        <i class="fas fa-star"></i>
+                                    {% endfor %}
+                                    {% for i in range(5 - review.rating) %}
+                                        <i class="far fa-star"></i>
+                                    {% endfor %}
+                                </div>
+                                <p class="mb-2">{{ review.comment }}</p>
+                                <small class="text-muted">{{ review.property.property_name }} • {{ (current_time.date() - review.review_date.date()).days }} days ago</small>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <p class="text-muted text-center">No recent reviews found.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Calendar & Tasks -->
+        <div class="col-lg-7 animate__animated animate__fadeIn">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-warning border-0 py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0 fw-bold"><i class="fas fa-calendar-day me-2 text-primary"></i> Upcoming Schedule</h5>
+                        <a href="{{ url_for('owner_calendar') }}" class="btn btn-sm btn-outline-primary">Full Calendar</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="mini-calendar mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="mb-0 fw-bold">{{ current_time.strftime('%B %Y') }}</h6>
+                            
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-bordered mb-0 text-center">
+                                <thead>
+                                    <tr>
+                                        {% for day in ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'] %}
+                                        <th>{{ day }}</th>
+                                        {% endfor %}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% set ns = namespace(day_num=1) %}
+                                    {% set first_day = current_time.replace(day=1).weekday() %}
+                                    {% set days_in_month = (current_time.replace(month=current_time.month % 12 +1, day=1) -
+                                    current_time.replace(day=1)).days %}
+                                    {% for week in range(6) %}
+                                    <tr>
+                                        {% for weekday in range(7) %}
+                                        {% if week == 0 and weekday < first_day or ns.day_num> days_in_month %}
+                                            <td class="text-muted">&nbsp;</td>
+                                            {% else %}
+                                            {% set current_date = current_time.replace(day=ns.day_num).date() %}
+                                            <td>
+                                                <div>{{ ns.day_num }}</div>
+                                                {% if current_date in calendar_events %}
+                                                {% for event in calendar_events[current_date] %}
+                                                <div class="badge bg-primary bg-opacity-10 text-primary d-block mt-1">
+                                                    {{ event.time }} - {{ event.title }}
+                                                </div>
+                                                {% endfor %}
+                                                {% endif %}
+                                            </td>
+                                            {% set ns.day_num = ns.day_num + 1 %}
+                                            {% endif %}
+                                            {% endfor %}
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="upcoming-events">
+                        <h6 class="fw-bold mb-3">Today's Events</h6>
+                        {% set today_date = current_time.date() %}
+                        {% if today_date in calendar_events %}
+                            {% for event in calendar_events[today_date] %}
+                            <div class="event-item mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="event-time bg-primary bg-opacity-10 text-primary rounded-2 p-2 me-3 text-center">
+                                        <div class="fw-bold">{{ event.time.split(' ')[0] }}</div>
+                                        <small>{{ event.time.split(' ')[1] }}</small>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold">{{ event.title }}</div>
+                                        <small class="text-muted">{{ event.guest }} • Booking #{{ event.booking_code }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <p class="text-muted">No events for today.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<style>
+    /* Dashboard Hero */
+    .dashboard-hero {
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        color: white;
+        padding-top: 80px;
+        padding-bottom: 80px;
+        position: relative;
+    }
+    
+    .hero-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80') center/cover;
+        opacity: 0.1;
+        z-index: 1;
+        pointer-events: none;
+    }
+    
+    .hero-pattern {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+        background-size: 15px 15px;
+        z-index: 1;
+        pointer-events: none;
+    }
+    
+    .floating-img {
+        animation: float 6s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+        100% { transform: translateY(0px); }
+    }
+    
+    /* Stat Cards */
+    .stat-card {
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .icon-box {
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Tables & Cards */
+    .booking-row {
+        transition: all 0.2s ease;
+    }
+    
+    .booking-row:hover {
+        background-color: #f8f9fa;
+    }
+    
+    .property-card {
+        transition: all 0.3s ease;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .property-card:hover {
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+    
+    .review-card {
+        padding: 15px;
+        border-radius: 8px;
+        background-color: #f8f9fa;
+        transition: all 0.3s ease;
+    }
+    
+    .review-card:hover {
+        background-color: #f1f3f5;
+    }
+    
+    /* Calendar */
+    .mini-calendar table {
+        table-layout: fixed;
+    }
+    
+    .mini-calendar td {
+        height: 40px;
+        vertical-align: middle;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .mini-calendar td:hover {
+        background-color: #f8f9fa;
+    }
+    
+    .mini-calendar .today {
+        background-color: #e9f5ff;
+        color: #0d6efd;
+        font-weight: bold;
+        border-radius: 50%;
+    }
+    
+    .event-time {
+        min-width: 60px;
+    }
+    
+    /* Animations */
+    .animate__animated {
+        --animate-duration: 0.8s;
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 992px) {
+        .dashboard-hero {
+            text-align: center;
+            padding-top: 60px;
+            padding-bottom: 60px;
+        }
+        
+        .display-4 {
+            font-size: 2.5rem;
+        }
+        
+        .hero-overlay, .hero-pattern {
+            opacity: 0.15;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .stat-card {
+            margin-bottom: 15px;
+        }
+    }
+</style>
+
+<!-- Add Animate.css for animations -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Highlight today's date in calendar
+        const today = new Date().getDate();
+        const calendarDates = document.querySelectorAll('.mini-calendar td');
+        calendarDates.forEach(date => {
+            if (parseInt(date.textContent) === today) {
+                date.classList.add('today');
+            }
+        });
+        
+        // Initialize tooltips
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+        
+        // Animate elements on scroll
+        const animateOnScroll = function() {
+            const elements = document.querySelectorAll('.animate__animated');
+            
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.2;
+                
+                if (elementPosition < screenPosition) {
+                    element.style.opacity = '1';
+                }
+            });
+        };
+        
+        // Initialize animation state
+        const animatedElements = document.querySelectorAll('.animate__animated');
+        animatedElements.forEach(element => {
+            element.style.opacity = '0';
+        });
+        
+        // Run once on load
+        animateOnScroll();
+        
+        // Then on scroll
+        window.addEventListener('scroll', animateOnScroll);
+    });
+</script>
+{% endblock %}

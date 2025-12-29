@@ -1,0 +1,614 @@
+{% extends 'user_side/index.html' %}
+
+{% block title %}
+User Dashboard
+{% endblock %}
+
+{% block content %}
+<style>
+    :root {
+        --gold: #D4AF37;
+        --dark-blue: #0F2C59;
+        --light-gold: #F4E5C2;
+        --cream: #FFF9F0;
+        --shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    body {
+        background-color: var(--cream);
+        color: #333;
+    }
+
+    /* Main Content */
+    .dashboard-container {
+        padding: 2rem 5%;
+        animation: fadeIn 0.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Hero Search Section */
+    .hero-section {
+        background: linear-gradient(rgba(15, 44, 89, 0.7), rgba(15, 44, 89, 0.7)),
+            url('https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');
+        background-size: cover;
+        background-position: center;
+        height: 400px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 3rem;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        position: relative;
+    }
+
+    .hero-section::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100px;
+        background: linear-gradient(transparent, var(--cream));
+    }
+
+    .search-container {
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        width: 90%;
+        max-width: 1000px;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .search-title {
+        color: #0F2C59;
+        margin-bottom: 1.5rem;
+        font-size: 1.8rem;
+        font-weight: 600;
+    }
+
+    .search-title span {
+        color: #D4AF37;
+    }
+
+    .search-form {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+
+    .search-group {
+        position: relative;
+    }
+
+    .search-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #0F2C59;
+        font-weight: 500;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 0.8rem 1rem;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background-color: #f9f9f9;
+    }
+
+    .search-input:focus {
+        outline: none;
+        border-color: #D4AF37;
+        box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+    }
+
+    .search-button {
+        background: linear-gradient(135deg, #D4AF37, #E8C547);
+        color: white;
+        border: none;
+        padding: 0.8rem 1.5rem;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        align-self: flex-end;
+        height: fit-content;
+    }
+
+    .search-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
+    }
+
+    @media (max-width: 768px) {
+        .search-form {
+            grid-template-columns: 1fr;
+        }
+
+        .hero-section {
+            height: 500px;
+        }
+    }
+
+    /* Section Headers */
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        color: var(--dark-blue);
+        position: relative;
+        padding-bottom: 0.5rem;
+    }
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 50px;
+        height: 3px;
+        background: var(--gold);
+    }
+
+    .view-all {
+        color: var(--gold);
+        font-weight: 500;
+        text-decoration: none;
+        transition: var(--transition);
+    }
+
+    .view-all:hover {
+        text-decoration: underline;
+    }
+
+    /* Cards Grid */
+    .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 2rem;
+        margin-bottom: 4rem;
+    }
+
+    /* Property Card */
+    .property-card {
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: var(--transition);
+        position: relative;
+    }
+
+    .property-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .property-image {
+        height: 200px;
+        width: 100%;
+        object-fit: cover;
+        transition: var(--transition);
+    }
+
+    .property-card:hover .property-image {
+        transform: scale(1.05);
+    }
+
+    .property-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: rgba(212, 175, 55, 0.9);
+        color: white;
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .property-details {
+        padding: 1.5rem;
+    }
+
+    .property-title {
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+        color: var(--dark-blue);
+    }
+
+    .property-location {
+        color: #666;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+
+    .property-location i {
+        color: var(--gold);
+    }
+
+    .property-price {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--gold);
+        margin-bottom: 1rem;
+    }
+
+    .property-price span {
+        font-size: 0.9rem;
+        font-weight: 400;
+        color: #666;
+    }
+
+    .property-rating {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        color: var(--gold);
+    }
+
+    /* Special Offers Section */
+    .offers-section {
+        margin-bottom: 4rem;
+    }
+
+    .offer-card {
+        position: relative;
+        height: 250px;
+        border-radius: 10px;
+        overflow: hidden;
+        display: flex;
+        align-items: flex-end;
+    }
+
+    .offer-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 1;
+        transition: var(--transition);
+    }
+
+    .offer-card:hover .offer-bg {
+        transform: scale(1.05);
+    }
+
+    .offer-content {
+        position: relative;
+        z-index: 2;
+        padding: 2rem;
+        color: white;
+        width: 100%;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    }
+
+    .offer-tag {
+        background: var(--gold);
+        color: var(--dark-blue);
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        display: inline-block;
+        margin-bottom: 1rem;
+    }
+
+    .offer-title {
+        font-size: 1.3rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .offer-description {
+        font-size: 0.9rem;
+        opacity: 0.9;
+        margin-bottom: 1rem;
+    }
+
+    .offer-button {
+        background: white;
+        color: var(--dark-blue);
+        border: none;
+        padding: 0.5rem 1.2rem;
+        border-radius: 20px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .offer-button:hover {
+        background: var(--gold);
+        transform: translateX(5px);
+    }
+
+    /* Recent Bookings */
+    .booking-card {
+        display: flex;
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: var(--transition);
+    }
+
+    .booking-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .booking-image {
+        width: 120px;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .booking-details {
+        padding: 1.5rem;
+        flex: 1;
+    }
+
+    .booking-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+    }
+
+    .booking-status {
+        background: #4CAF50;
+        color: white;
+        padding: 0.2rem 0.6rem;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 600;
+    }
+
+    .booking-title {
+        font-size: 1.1rem;
+        color: var(--dark-blue);
+        margin-bottom: 0.5rem;
+    }
+
+    .booking-date {
+        color: #666;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+
+    .booking-price {
+        font-weight: 600;
+        color: var(--dark-blue);
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        .search-form {
+            grid-template-columns: 1fr;
+        }
+
+        .hero-section {
+            height: 500px;
+        }
+
+        .search-container {
+            padding: 1.5rem;
+        }
+
+        .cards-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .booking-card {
+            flex-direction: column;
+        }
+
+        .booking-image {
+            width: 100%;
+            height: 150px;
+        }
+    }
+
+    .property-actions {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .view-btn {
+        background-color: green;
+        color: white;
+        padding: 0.5rem 0.8rem;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        transition: var(--transition);
+        text-decoration: none;
+    }
+    .view-btn:hover {
+        opacity: 0.9;
+    }
+</style>
+
+<!-- Dashboard Content -->
+<div class="dashboard-container">
+    <!-- Hero Search Section -->
+    <section class="hero-section">
+        <div class="search-container">
+            <h2 class="search-title">Find Your Perfect <span>Luxury Stay</span></h2>
+            <form class="search-form" method="POST" action="{{ url_for('property_search') }}">
+                <div class="search-group">
+                    <label for="destination">Destination</label>
+                    <input type="text" id="destination" name="q" class="search-input"
+                        placeholder="City, country, or property name" required>
+                </div>
+                <div class="search-group">
+                    <label for="check-in">Check In</label>
+                    <input type="date" id="check-in" name="check_in" class="search-input"
+                        min="{{ date.today().strftime('%Y-%m-%d') }}" required>
+                </div>
+                <div class="search-group">
+                    <label for="check-out">Check Out</label>
+                    <input type="date" id="check-out" name="check_out" class="search-input"
+                        min="{{ date.today().strftime('%Y-%m-%d') }} " required>
+                </div>
+                <div class="search-group">
+                    <label for="guests">Guests</label>
+                    <select id="guests" name="guests" class="search-input" required>
+                        <option value="1" selected>1 Guest</option>
+                        <option value="2">2 Guests</option>
+                        <option value="3">3 Guests</option>
+                        <option value="4">4 Guests</option>
+                        <option value="5+">5+ Guests</option>
+                    </select>
+                </div>
+                <button type="submit" class="search-button">Search</button>
+            </form>
+        </div>
+    </section>
+
+
+    <!-- Special Offers Section -->
+    <section class="offers-section">
+        <div class="section-header">
+            <h3 class="section-title">Special Offers</h3>
+            <a href="#" class="view-all">View All Offers</a>
+        </div>
+
+        <div class="cards-grid">
+            <div class="offer-card">
+                <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+                    alt="Maldives Resort" class="offer-bg">
+                <div class="offer-content">
+                    <span class="offer-tag">30% OFF</span>
+                    <h4 class="offer-title">Paradise in Maldives</h4>
+                    <p class="offer-description">Book your overwater villa now and get 30% discount</p>
+                    <button class="offer-button">Claim Offer</button>
+                </div>
+            </div>
+
+            <div class="offer-card">
+                <img src="https://images.unsplash.com/photo-1535827841776-24afc1e255ac?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1635&q=80"
+                    alt="Paris Hotel" class="offer-bg">
+                <div class="offer-content">
+                    <span class="offer-tag">FREE NIGHT</span>
+                    <h4 class="offer-title">Romantic Paris Getaway</h4>
+                    <p class="offer-description">Stay 3 nights, pay for 2 in the city of love</p>
+                    <button class="offer-button">Claim Offer</button>
+                </div>
+            </div>
+
+            <div class="offer-card">
+                <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+                    alt="Bali Villa" class="offer-bg">
+                <div class="offer-content">
+                    <span class="offer-tag">EARLY BIRD</span>
+                    <h4 class="offer-title">Luxury Bali Villas</h4>
+                    <p class="offer-description">Book 60 days in advance and save 25%</p>
+                    <button class="offer-button">Claim Offer</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recent Bookings Section -->
+    <section class="bookings-section">
+        <div class="section-header">
+            <h3 class="section-title">Your Recent Bookings</h3>
+            <a href="{{ url_for('my_bookings') }}" class="view-all">View All Bookings</a>
+        </div>
+
+        <div class="cards-grid">
+            {% for booking in recent_bookings %}
+            <div class="booking-card">
+                <img src="/{{ booking.image }}" alt="{{ booking.property_name }}" class="booking-image">
+                <div class="booking-details">
+                    <div class="booking-header">
+                        <span class="booking-date">{{ booking.start_date }} - {{ booking.end_date }}</span>
+                        <span class="booking-status mb-4">{{ booking.status }}</span>
+                    </div>
+                    <h4 class="booking-title">{{ booking.property_name }}</h4>
+                    <p class="booking-price">${{ booking.price }}</p>
+                </div>
+            </div>
+            {% else %}
+            <p>No recent bookings found.</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Top Rated Hotels Section -->
+    <section class="luxury-section">
+        <div class="section-header">
+            <h3 class="section-title">Top Rated Hotels</h3>
+            <!-- <a href="#" class="view-all">View All</a> -->
+        </div>
+
+        <div class="cards-grid">
+            {% for property in top_rated %}
+            <div class="property-card">
+                <img src="/{{ property.property_photos.split(',')[0] if property.property_photos else '' }}"
+                    alt="{{ property.property_name }}" class="property-image">
+
+                <div class="property-details">
+                    <h4 class="property-title">{{ property.property_name }}</h4>
+                    <p class="property-location"><i class="fas fa-map-marker-alt"></i> {{ property.city }}, {{ property.state }}</p>
+                    <!-- <p class="property-price">₹{{ property.price_per_night }} <span>/ night</span></p> -->
+
+                    <div class="property-rating">
+                        {% set avg_rating = property.reviews | map(attribute='rating') | sum / (property.reviews|length)
+                        if property.reviews|length > 0 else 0 %}
+                        {% for i in range(5) %}
+                        {% if i < avg_rating|round(0, 'floor' ) %} <i class="fas fa-star"></i>
+                            {% else %}
+                            <i class="far fa-star"></i>
+                            {% endif %}
+                            {% endfor %}
+                            <span>({{ property.reviews|length }} reviews)</span>
+                    </div>
+                    <div class="property-actions">
+                            <a href="{{ url_for('view_property_and_book', property_id=property.id, check_in=check_in, check_out=check_out, guests=guests) }}"
+                                class="view-btn">
+                                <i class="fas fa-eye"></i> View
+                            </a>
+                        </div>
+                </div>
+            </div>
+            {% else %}
+            <p>No top-rated hotels available yet.</p>
+            {% endfor %}
+        </div>
+    </section>
+
+</div>
+{% endblock %}

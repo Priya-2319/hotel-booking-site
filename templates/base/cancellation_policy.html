@@ -1,0 +1,429 @@
+{% extends 'base/index.html' %}  <!-- Replace with your actual base template -->
+{% block title %}Cancellation Policy{% endblock %}
+
+{% block content %}
+<div class="cancellation-container mt-4 mb-3" style="
+    background: linear-gradient(rgba(255, 255, 255, 0.95), 
+                url('https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=1632&q=80');
+    background-size: cover;
+    background-attachment: fixed;
+    min-height: 100vh;
+    padding: 4rem 0;
+">
+    <div class="container">
+        <div class="cancellation-card animate__animated animate__fadeIn" style="
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border: none;
+        ">
+            <!-- Header with Gradient -->
+            <div class="cancellation-header text-center py-5" style="
+                background: linear-gradient(135deg, #c31432 0%, #240b36 100%);
+                color: white;
+            ">
+                <h1 class="display-4 fw-bold mb-3">LuxStay Cancellation Policy</h1>
+                <p class="lead mb-0">Last Updated: {{ now.strftime('%B %d, %Y') }}</p>
+            </div>
+
+            <div class="cancellation-body p-4 p-md-5">
+                <!-- Introduction -->
+                <section class="mb-5 animate__animated animate__fadeInUp">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="icon-box me-3" style="
+                            background: linear-gradient(135deg, #c31432 0%, #240b36 100%);
+                            width: 50px;
+                            height: 50px;
+                            border-radius: 12px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        ">
+                            <i class="fas fa-info-circle text-white fs-4"></i>
+                        </div>
+                        <h2 class="mb-0">Our Cancellation Policy</h2>
+                    </div>
+                    <p class="text-muted">
+                        At LuxStay, we understand that plans can change. Our cancellation policy is designed to be fair to both our guests and our property owners. Please review the following policy carefully before making your reservation.
+                    </p>
+                </section>
+
+                <!-- Standard Cancellation -->
+                <section class="mb-5 animate__animated animate__fadeInUp animate__delay-1s">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="icon-box me-3" style="
+                            background: linear-gradient(135deg, #e52d27 0%, #b31217 100%);
+                            width: 50px;
+                            height: 50px;
+                            border-radius: 12px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        ">
+                            <i class="fas fa-calendar-times text-white fs-4"></i>
+                        </div>
+                        <h2 class="mb-0">Standard Cancellation Policy</h2>
+                    </div>
+                    <div class="terms-content">
+                        <div class="term-item mb-3">
+                            <h5 class="d-flex align-items-center">
+                                <span class="term-bullet me-2" style="
+                                    display: inline-block;
+                                    width: 24px;
+                                    height: 24px;
+                                    background: #e52d27;
+                                    color: white;
+                                    border-radius: 50%;
+                                    text-align: center;
+                                    line-height: 24px;
+                                    font-size: 14px;
+                                ">1</span>
+                                Flexible Cancellation (7+ days before check-in)
+                            </h5>
+                            <p class="text-muted ms-4 ps-3">
+                                Cancel at least 7 days before your check-in date to receive a full refund (minus any service fees).
+                            </p>
+                        </div>
+                        <div class="term-item mb-3">
+                            <h5 class="d-flex align-items-center">
+                                <span class="term-bullet me-2" style="
+                                    display: inline-block;
+                                    width: 24px;
+                                    height: 24px;
+                                    background: #e52d27;
+                                    color: white;
+                                    border-radius: 50%;
+                                    text-align: center;
+                                    line-height: 24px;
+                                    font-size: 14px;
+                                ">2</span>
+                                Moderate Cancellation (3-6 days before check-in)
+                            </h5>
+                            <p class="text-muted ms-4 ps-3">
+                                Cancel between 3-6 days before check-in to receive a 50% refund of the accommodation fee (service fees non-refundable).
+                            </p>
+                        </div>
+                        <div class="term-item mb-3">
+                            <h5 class="d-flex align-items-center">
+                                <span class="term-bullet me-2" style="
+                                    display: inline-block;
+                                    width: 24px;
+                                    height: 24px;
+                                    background: #e52d27;
+                                    color: white;
+                                    border-radius: 50%;
+                                    text-align: center;
+                                    line-height: 24px;
+                                    font-size: 14px;
+                                ">3</span>
+                                Strict Cancellation (Within 48 hours)
+                            </h5>
+                            <p class="text-muted ms-4 ps-3">
+                                Cancellations made less than 48 hours before check-in will not receive a refund. No-shows will be charged the full reservation amount.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Special Cases -->
+                <section class="mb-5 animate__animated animate__fadeInUp animate__delay-2s">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="icon-box me-3" style="
+                            background: linear-gradient(135deg, #614385 0%, #516395 100%);
+                            width: 50px;
+                            height: 50px;
+                            border-radius: 12px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        ">
+                            <i class="fas fa-exclamation-triangle text-white fs-4"></i>
+                        </div>
+                        <h2 class="mb-0">Special Cases & Exceptions</h2>
+                    </div>
+                    <div class="terms-content">
+                        <div class="term-item mb-3">
+                            <h5 class="d-flex align-items-center">
+                                <span class="term-bullet me-2" style="
+                                    display: inline-block;
+                                    width: 24px;
+                                    height: 24px;
+                                    background: #614385;
+                                    color: white;
+                                    border-radius: 50%;
+                                    text-align: center;
+                                    line-height: 24px;
+                                    font-size: 14px;
+                                ">1</span>
+                                Peak Season & Special Events
+                            </h5>
+                            <p class="text-muted ms-4 ps-3">
+                                During peak seasons or special events, a stricter cancellation policy may apply (14-day cancellation for full refund). This will be clearly stated at booking.
+                            </p>
+                        </div>
+                        <div class="term-item mb-3">
+                            <h5 class="d-flex align-items-center">
+                                <span class="term-bullet me-2" style="
+                                    display: inline-block;
+                                    width: 24px;
+                                    height: 24px;
+                                    background: #614385;
+                                    color: white;
+                                    border-radius: 50%;
+                                    text-align: center;
+                                    line-height: 24px;
+                                    font-size: 14px;
+                                ">2</span>
+                                Long-term Stays (28+ days)
+                            </h5>
+                            <p class="text-muted ms-4 ps-3">
+                                For stays of 28 nights or more: Cancel within 48 hours of booking for full refund. After 48 hours, first month is non-refundable.
+                            </p>
+                        </div>
+                        <div class="term-item mb-3">
+                            <h5 class="d-flex align-items-center">
+                                <span class="term-bullet me-2" style="
+                                    display: inline-block;
+                                    width: 24px;
+                                    height: 24px;
+                                    background: #614385;
+                                    color: white;
+                                    border-radius: 50%;
+                                    text-align: center;
+                                    line-height: 24px;
+                                    font-size: 14px;
+                                ">3</span>
+                                Extenuating Circumstances
+                            </h5>
+                            <p class="text-muted ms-4 ps-3">
+                                In cases of serious illness, death, or natural disasters, please contact us immediately. Documentation may be required for exceptions.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Refund Process -->
+                <section class="mb-5 animate__animated animate__fadeInUp animate__delay-3s">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="icon-box me-3" style="
+                            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+                            width: 50px;
+                            height: 50px;
+                            border-radius: 12px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        ">
+                            <i class="fas fa-money-bill-wave text-white fs-4"></i>
+                        </div>
+                        <h2 class="mb-0">Refund Process</h2>
+                    </div>
+                    <div class="terms-content">
+                        <div class="term-item mb-3">
+                            <h5 class="d-flex align-items-center">
+                                <span class="term-bullet me-2" style="
+                                    display: inline-block;
+                                    width: 24px;
+                                    height: 24px;
+                                    background: #11998e;
+                                    color: white;
+                                    border-radius: 50%;
+                                    text-align: center;
+                                    line-height: 24px;
+                                    font-size: 14px;
+                                ">1</span>
+                                Processing Time
+                            </h5>
+                            <p class="text-muted ms-4 ps-3">
+                                Refunds typically process within 7-10 business days. The time it takes for the refund to appear in your account depends on your financial institution.
+                            </p>
+                        </div>
+                        <div class="term-item mb-3">
+                            <h5 class="d-flex align-items-center">
+                                <span class="term-bullet me-2" style="
+                                    display: inline-block;
+                                    width: 24px;
+                                    height: 24px;
+                                    background: #11998e;
+                                    color: white;
+                                    border-radius: 50%;
+                                    text-align: center;
+                                    line-height: 24px;
+                                    font-size: 14px;
+                                ">2</span>
+                                Service Fees
+                            </h5>
+                            <p class="text-muted ms-4 ps-3">
+                                Service fees are non-refundable unless the cancellation is due to an error on our part or extenuating circumstances.
+                            </p>
+                        </div>
+                        <div class="term-item mb-3">
+                            <h5 class="d-flex align-items-center">
+                                <span class="term-bullet me-2" style="
+                                    display: inline-block;
+                                    width: 24px;
+                                    height: 24px;
+                                    background: #11998e;
+                                    color: white;
+                                    border-radius: 50%;
+                                    text-align: center;
+                                    line-height: 24px;
+                                    font-size: 14px;
+                                ">3</span>
+                                Credit vs. Original Payment
+                            </h5>
+                            <p class="text-muted ms-4 ps-3">
+                                Refunds are issued to the original payment method. If this isn't possible, we may issue a credit for future stays.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- How to Cancel -->
+                <section class="mb-5 animate__animated animate__fadeInUp animate__delay-4s">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="icon-box me-3" style="
+                            background: linear-gradient(135deg, #f12711 0%, #f5af19 100%);
+                            width: 50px;
+                            height: 50px;
+                            border-radius: 12px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        ">
+                            <i class="fas fa-question-circle text-white fs-4"></i>
+                        </div>
+                        <h2 class="mb-0">How to Cancel Your Reservation</h2>
+                    </div>
+                    <div class="terms-content">
+                        <div class="term-item mb-3">
+                            <h5 class="d-flex align-items-center">
+                                <span class="term-bullet me-2" style="
+                                    display: inline-block;
+                                    width: 24px;
+                                    height: 24px;
+                                    background: #f12711;
+                                    color: white;
+                                    border-radius: 50%;
+                                    text-align: center;
+                                    line-height: 24px;
+                                    font-size: 14px;
+                                ">1</span>
+                                Online Cancellation
+                            </h5>
+                            <p class="text-muted ms-4 ps-3">
+                                Log in to your LuxStay account, go to "My Trips," select the reservation, and click "Cancel Reservation."
+                            </p>
+                        </div>
+                        <div class="term-item mb-3">
+                            <h5 class="d-flex align-items-center">
+                                <span class="term-bullet me-2" style="
+                                    display: inline-block;
+                                    width: 24px;
+                                    height: 24px;
+                                    background: #f12711;
+                                    color: white;
+                                    border-radius: 50%;
+                                    text-align: center;
+                                    line-height: 24px;
+                                    font-size: 14px;
+                                ">2</span>
+                                Email Cancellation
+                            </h5>
+                            <p class="text-muted ms-4 ps-3">
+                                Send cancellation requests to cancellations@luxstay.com with your reservation number and details.
+                            </p>
+                        </div>
+                        <div class="term-item mb-3">
+                            <h5 class="d-flex align-items-center">
+                                <span class="term-bullet me-2" style="
+                                    display: inline-block;
+                                    width: 24px;
+                                    height: 24px;
+                                    background: #f12711;
+                                    color: white;
+                                    border-radius: 50%;
+                                    text-align: center;
+                                    line-height: 24px;
+                                    font-size: 14px;
+                                ">3</span>
+                                Phone Support
+                            </h5>
+                            <p class="text-muted ms-4 ps-3">
+                                Call our customer service at +1 (800) 555-LUXS (5897) for assistance with cancellations.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Footer Acceptance -->
+                <div class="terms-acceptance text-center py-4 mt-4" style="
+                    background: rgba(195, 20, 50, 0.05);
+                    border-radius: 12px;
+                    border: 1px dashed rgba(195, 20, 50, 0.3);
+                ">
+                    <p class="mb-0 text-muted">
+                        By making a reservation with LuxStay, you acknowledge that you have read, understood, and agree to this Cancellation Policy.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Animation for scrolling */
+    .cancellation-container section {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.6s ease;
+    }
+    
+    .cancellation-container section.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .cancellation-header {
+            padding: 3rem 1rem;
+        }
+        
+        .cancellation-header h1 {
+            font-size: 2rem;
+        }
+        
+        .cancellation-body {
+            padding: 2rem;
+        }
+    }
+    
+    /* Smooth scrolling for anchor links */
+    html {
+        scroll-behavior: smooth;
+    }
+</style>
+
+<script>
+    // Intersection Observer for scroll animations
+    document.addEventListener('DOMContentLoaded', function() {
+        const sections = document.querySelectorAll('.cancellation-container section');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {threshold: 0.1});
+        
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,526 @@
+{% extends 'user_side/index.html' %}
+
+{% block title %}Search Results | LuxStay{% endblock %}
+
+{% block content %}
+<div class="search-results-container">
+    <!-- Hero Section with Search Summary -->
+    <section class="search-hero"
+        style="background: linear-gradient(135deg, rgba(15, 44, 89, 0.85), rgba(15, 44, 89, 0.92)), url('https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80') no-repeat center/cover;">
+        <div class="search-summary">
+            <section class="hero-section">
+                <div class="search-container">
+                    <h2 class="search-title">Find Your Perfect <span>Luxury Stay</span></h2>
+                    <form class="search-form" method="POST" action="{{ url_for('property_search') }}">
+                        <div class="search-group">
+                            <label for="destination">Destination</label>
+                            <input type="text" id="destination" name="q" class="search-input" value="{{ query or '' }}"
+                                placeholder="City, country, or property name">
+                        </div>
+                        <div class="search-group">
+                            <label for="check-in">Check In</label>
+                            <input type="date" id="check-in" name="check_in" class="search-input"
+                                value="{{ check_in or '' }}" min="{{ date.today().strftime('%Y-%m-%d') }}">
+                        </div>
+                        <div class="search-group">
+                            <label for="check-out">Check Out</label>
+                            <input type="date" id="check-out" name="check_out" class="search-input"
+                                value="{{ check_out or '' }}" min="{{ date.today().strftime('%Y-%m-%d') }}">
+                        </div>
+                        <div class="search-group">
+                            <label for="guests">Guests</label>
+                            <select id="guests" name="guests" class="search-input">
+                                {% for num in range(1, 6) %}
+                                <option value="{{ num }}" {% if guests|string == num|string %}selected{% endif %}>
+
+                                    {% if num == 5 %}
+                                    5+ Guests
+                                    {% else %}
+                                    {{ num }} Guest{% if num != 1 %}s{% endif %}
+                                    {% endif %}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="submit" class="search-button">Search</button>
+                    </form>
+                </div>
+            </section>
+            <h1><i class="fas fa-search"></i> Search Results</h1>
+            <p class="result-stats">
+                {% if properties %}
+                <span>{{ properties|length }}</span> properties found matching your criteria
+                {% else %}
+                No properties found matching your criteria
+                {% endif %}
+            </p>
+            <div class="search-params">
+                <span class="param-pill"><i class="fas fa-map-marker-alt"></i> {{ query or 'Anywhere' }}</span>
+                <span class="param-pill"><i class="fas fa-calendar-alt"></i>
+                    {% if check_in and check_out %}
+                    {{ check_in }} to {{ check_out }}
+                    {% else %}
+                    Any dates
+                    {% endif %}
+                </span>
+                <span class="param-pill"><i class="fas fa-user-friends"></i>
+                    {{ guests }} guest{{ 's' if guests|string != '1' else '' }}
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Results Section -->
+    <section class="results-section">
+        {% if properties %}
+        <div class="property-grid">
+            {% for property in properties %}
+            <div class="property-card">
+                <!-- Wishlist Toggle -->
+                <button class="wishlist-toggle" data-property-id="{{ property.id }}">
+                    <i class="far fa-heart"></i>
+                    <i class="fas fa-heart"></i>
+                </button>
+
+                <!-- Property Image -->
+                <div class="property-image-container">
+                    <img src="{{ property.property_photos.split(',')[0] if property.property_photos else 'https://via.placeholder.com/400x300?text=LuxStay' }}"
+                        alt="{{ property.property_name }}" class="property-image">
+                    <span class="property-badge">{{ property.property_type }}</span>
+                </div>
+
+                <!-- Property Details -->
+                <div class="property-details">
+                    <h3 class="property-title">{{ property.property_name }}</h3>
+                    <p class="property-location"><i class="fas fa-map-marker-alt"></i> {{ property.city }}, {{
+                        property.country }}</p>
+
+                    <div class="property-footer">
+                        <div class="price-rating">
+                            <div class="property-rating">
+                                <i class="fas fa-star"></i> 4.8 <span>(24)</span>
+                            </div>
+                        </div>
+                        <div class="property-actions">
+                            <a href="{{ url_for('view_property_and_book', property_id=property.id, check_in=check_in, check_out=check_out, guests=guests) }}"
+                                class="view-btn">
+                                <i class="fas fa-eye"></i> View
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="no-results">
+            <div class="no-results-content">
+                <i class="fas fa-search-location"></i>
+                <h2>No Properties Found</h2>
+                <p>We couldn't find any properties matching your search criteria.</p>
+                <a href="{{ url_for('user_dashboard') }}" class="retry-btn">
+                    <i class="fas fa-redo"></i> Try Different Search
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </section>
+</div>
+
+
+<!-- CSS Styles -->
+<style>
+    :root {
+        --gold: #D4AF37;
+        --dark-blue: #0F2C59;
+        --transition: all 0.3s ease;
+    }
+
+    .search-results-container {
+        font-family: 'Montserrat', sans-serif;
+        color: #333;
+        background-color: #f9f9f9;
+    }
+
+    /* Hero Section */
+    .search-hero {
+        background-size: cover;
+        background-position: center;
+        padding: 3rem 2rem;
+        color: white;
+        text-align: center;
+        height: 430px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .search-title {
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .search-title span {
+        color: var(--gold);
+    }
+
+    .search-form {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1rem;
+        max-width: 1000px;
+        margin: 0 auto;
+        margin-top: 1rem;
+    }
+
+    .search-group {
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+    }
+
+    .search-group label {
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    .search-input {
+        padding: 0.7rem;
+        border: none;
+        border-radius: 6px;
+        font-size: 1rem;
+        outline: none;
+    }
+
+    .search-button {
+        grid-column: span 4;
+        background-color: var(--gold);
+        color: white;
+        padding: 0.9rem;
+        border: none;
+        border-radius: 6px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .search-button:hover {
+        background-color: #c89e32;
+    }
+
+    /* Search Summary */
+    .search-summary h1 {
+        font-size: 2.2rem;
+        margin-top: 2rem;
+    }
+
+    .result-stats {
+        font-size: 1rem;
+        margin-top: 0.5rem;
+        color: #555;
+    }
+
+    .result-stats span {
+        font-weight: bold;
+        color: var(--dark-blue);
+    }
+
+    .search-params {
+        margin-top: 1rem;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+
+    .param-pill {
+        background-color: white;
+        border: 1px solid var(--gold);
+        border-radius: 20px;
+        padding: 8px 16px;
+        font-size: 0.9rem;
+        color: #333;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    /* Results Section */
+    .results-section {
+        padding: 2rem;
+    }
+
+    .property-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+
+    /* Property Card */
+    .property-card {
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+        position: relative;
+        transition: var(--transition);
+    }
+
+    .property-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .wishlist-toggle {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1.2rem;
+        z-index: 2;
+        color: white;
+        text-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+    }
+
+    .wishlist-toggle .fa-heart {
+        display: none;
+    }
+
+    .wishlist-toggle.active .far.fa-heart {
+        display: none;
+    }
+
+    .wishlist-toggle.active .fas.fa-heart {
+        display: inline;
+        color: var(--gold);
+    }
+
+    .property-image-container {
+        position: relative;
+        width: 100%;
+        height: 220px;
+        overflow: hidden;
+    }
+
+    .property-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .property-badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background-color: var(--gold);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 6px;
+        font-size: 0.75rem;
+    }
+
+    .property-details {
+        padding: 1rem;
+    }
+
+    .property-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 0.3rem;
+    }
+
+    .property-location {
+        font-size: 0.9rem;
+        color: #777;
+        margin-bottom: 0.5rem;
+    }
+
+    .property-meta {
+        font-size: 0.85rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .property-meta span {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+
+    .property-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .price-rating {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .property-price {
+        font-size: 1.1rem;
+        font-weight: bold;
+        color: var(--dark-blue);
+    }
+
+    .property-price span {
+        font-weight: normal;
+        color: #666;
+        font-size: 0.9rem;
+    }
+
+    .property-rating {
+        font-size: 0.9rem;
+        color: var(--gold);
+    }
+
+    .property-actions {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .view-btn,
+    .book-btn {
+        background-color: var(--dark-blue);
+        color: white;
+        padding: 0.5rem 0.8rem;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        transition: var(--transition);
+        text-decoration: none;
+    }
+
+    .book-btn {
+        background-color: var(--gold);
+        color: white;
+    }
+
+    .view-btn:hover,
+    .book-btn:hover {
+        opacity: 0.9;
+    }
+
+    /* No Results */
+    .no-results {
+        text-align: center;
+        padding: 4rem 2rem;
+        background-color: white;
+        border-radius: 12px;
+    }
+
+    .no-results-content i {
+        font-size: 3rem;
+        color: var(--gold);
+        margin-bottom: 1rem;
+    }
+
+    .no-results-content h2 {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .no-results-content p {
+        font-size: 1rem;
+        color: #777;
+    }
+
+    .retry-btn {
+        margin-top: 1.5rem;
+        background-color: var(--dark-blue);
+        color: white;
+        padding: 0.7rem 1.2rem;
+        border-radius: 8px;
+        font-size: 1rem;
+        text-decoration: none;
+        display: inline-block;
+        transition: var(--transition);
+    }
+
+    .retry-btn:hover {
+        background-color: #0c2349;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .search-form {
+            grid-template-columns: 1fr;
+        }
+
+        .search-hero {
+            height: 250px;
+            padding: 1.5rem;
+        }
+
+        .search-summary h1 {
+            font-size: 2rem;
+        }
+
+        .property-grid {
+            grid-template-columns: 1fr;
+            padding: 0 1rem;
+        }
+
+        .property-image-container {
+            height: 200px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .search-hero {
+            height: 220px;
+        }
+
+        .search-summary h1 {
+            font-size: 1.8rem;
+        }
+
+        .property-actions {
+            flex-direction: column;
+        }
+
+        .param-pill {
+            font-size: 0.8rem;
+            padding: 6px 12px;
+        }
+    }
+</style>
+
+<!-- Wishlist Toggle JS -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const wishlistButtons = document.querySelectorAll('.wishlist-toggle');
+        wishlistButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const propertyId = this.getAttribute('data-property-id');
+                this.classList.toggle('active');
+
+                fetch('/update_wishlist', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        property_id: propertyId,
+                        action: this.classList.contains('active') ? 'add' : 'remove'
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            console.log('Wishlist updated');
+                        }
+                    });
+            });
+        });
+    });
+</script>
+{% endblock %}

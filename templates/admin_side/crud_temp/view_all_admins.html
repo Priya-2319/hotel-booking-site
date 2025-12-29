@@ -1,0 +1,95 @@
+{% extends 'admin_side/index.html' %}
+
+{% block title %}All Administrators{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <h2 class="fw-bold text-primary mb-0">All Administrators</h2>
+        <div class="d-flex align-items-center gap-3">
+            <span class="text-muted">Today: {{ today_date.strftime('%d %B %Y') }}</span>
+            <a href="{{ url_for('generate_admin_code') }}" class="btn btn-primary shadow-sm">
+                <i class="bi bi-plus-circle me-1"></i> Add New Admin
+            </a>
+        </div>
+    </div>
+
+    <!-- Search Box -->
+    <div class="mb-3 col-md-6">
+        <input type="text" id="adminSearch" class="form-control" placeholder="Search by Name, Email, Phone...">
+    </div>
+
+    {% if admins %}
+    <div class="card shadow-lg border-0 rounded-3">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0" id="adminsTable">
+                    <thead class="table-light">
+                        <tr>
+                            <th>#</th>
+                            <th>Admin Code</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Status</th>
+                            <th>Created At</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for admin in admins %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td><span class="badge bg-secondary">{{ admin.admin_code }}</span></td>
+                            <td class="fw-semibold">{{ admin.name }}</td>
+                            <td>{{ admin.email }}</td>
+                            <td>{{ admin.phone }}</td>
+                            <td>
+                                {% if admin.status == 'Active' %}
+                                    <span class="badge bg-success">Active</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Inactive</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ admin.created_at.strftime('%d %b %Y') }}</td>
+                            <td class="text-center">
+                                <div class="btn-group btn-group-sm">
+                                    <a href="{{ url_for('view_admin', admin_id=admin.id) }}" 
+                                       class="btn btn-outline-primary" title="View Details">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a href="{{ url_for('delete_admin', admin_id=admin.id) }}" 
+                                       class="btn btn-outline-danger" title="Delete"
+                                       onclick="return confirm('Are you sure you want to delete this admin?');">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-info text-center">
+        <i class="bi bi-info-circle me-2"></i> No administrators found.
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    // Live search function
+    document.getElementById('adminSearch').addEventListener('input', function() {
+        let filter = this.value.toLowerCase();
+        let rows = document.querySelectorAll('#adminsTable tbody tr');
+        
+        rows.forEach(row => {
+            let text = row.innerText.toLowerCase();
+            row.style.display = text.includes(filter) ? '' : 'none';
+        });
+    });
+</script>
+
+{% endblock %}

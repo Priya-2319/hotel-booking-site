@@ -1,0 +1,124 @@
+{% extends 'owner_side/index.html' %}
+{% block title %}All Notifications{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h3 class="mb-4 text-center fw-bold">Notifications</h3>
+
+    <!-- Filter Buttons -->
+    <div class="d-flex justify-content-center mb-4 flex-wrap gap-2">
+        <a href="{{ url_for('owner_all_notifications', filter_type='all') }}" 
+           class="btn btn-outline-primary {% if filter_type=='all' %}active{% endif %}">
+            All
+        </a>
+        <a href="{{ url_for('owner_all_notifications', filter_type='unread') }}" 
+           class="btn btn-outline-primary {% if filter_type=='unread' %}active{% endif %}">
+            Unread
+        </a>
+        <a href="{{ url_for('owner_all_notifications', filter_type='read') }}" 
+           class="btn btn-outline-primary {% if filter_type=='read' %}active{% endif %}">
+            Read
+        </a>
+    </div>
+
+    <!-- Notifications List -->
+    <div class="row g-4">
+        {% for notif in notifications %}
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card notification-card shadow-sm {% if not notif.is_read %}unread{% endif %} h-100">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <div>
+                        <h5 class="fw-bold">{{ notif.title }}</h5>
+                        <p class="mb-2">{{ notif.message }}</p>
+                        <small class="text-white-50">{{ notif.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                    </div>
+                    {% if not notif.is_read %}
+                    <button class="btn btn-sm btn-light mt-3 mark-read-btn" data-id="{{ notif.id }}">
+                        Mark as Read
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <p class="text-muted mt-3 text-center">No notifications found.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+/* Notification Cards */
+.notification-card {
+    border: none;
+    border-radius: 15px;
+    background: linear-gradient(135deg, #4facfe, #00f2fe); /* Read gradient */
+    color: #fff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    min-height: 150px;
+}
+.notification-card.unread {
+    background: linear-gradient(135deg, #ff758c, #ff7eb3); /* Unread gradient */
+    color: #fff;
+}
+.notification-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+}
+
+/* Buttons */
+.btn-outline-primary.active {
+    background: linear-gradient(90deg, #4facfe, #00f2fe);
+    color: white;
+    border: none;
+}
+.mark-read-btn {
+    align-self: flex-end;
+}
+
+/* Badge for unread */
+.notification-card.unread::before {
+    content: "NEW";
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background-color: #ff3d6b;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: bold;
+    padding: 2px 8px;
+    border-radius: 12px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .notification-card {
+        margin-bottom: 15px;
+    }
+}
+</style>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const buttons = document.querySelectorAll('.mark-read-btn');
+    buttons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const id = this.dataset.id;
+            fetch(`/owner/notifications_all/mark_read/${id}`, {
+                method: 'POST'
+            }).then(res => res.json())
+            .then(data => {
+                if (data.status === "success") {
+                    const card = this.closest('.notification-card');
+                    card.classList.remove('unread');
+                    card.style.background = "linear-gradient(135deg, #4facfe, #00f2fe)";
+                    card.style.color = "#fff";
+                    this.remove();
+                }
+            }).catch(err => console.error(err));
+        });
+    });
+});
+</script>
+{% endblock %}

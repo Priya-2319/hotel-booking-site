@@ -1,0 +1,163 @@
+<style>
+    .navbar {
+        background: linear-gradient(135deg, #1e3c72 0%, #1b9b66 100%);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .site-logo {
+        height: 40px;
+        /* Adjust based on your logo proportions */
+        width: auto;
+        max-width: 120px;
+        /* Prevent overflow on mobile */
+        object-fit: contain;
+        transition: all 0.3s ease;
+    }
+
+    .navbar-brand {
+        display: flex;
+        align-items: center;
+    }
+
+    /* Optional hover effect */
+    .navbar-brand:hover .site-logo {
+        transform: scale(1.05);
+    }
+
+    .nav-link {
+        color: rgba(240, 227, 227, 0.85) !important;
+        font-weight: 500;
+        margin: 0 8px;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .nav-link:hover {
+        color: white !important;
+        transform: translateY(-2px);
+    }
+
+    .nav-link.active {
+        color: white !important;
+        font-weight: 600;
+    }
+
+    .nav-link.active::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background-color: #ffc107;
+        border-radius: 3px;
+    }
+
+    .navbar-toggler {
+        border: none;
+        color: white;
+    }
+
+    .navbar-toggler:focus {
+        box-shadow: none;
+    }
+
+    .user-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 8px;
+    }
+
+    .dropdown-menu {
+        border: none;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+
+    .dropdown-item {
+        padding: 8px 16px;
+        transition: all 0.2s;
+    }
+
+    .dropdown-item:hover {
+        background-color: #f8f9fa;
+        padding-left: 20px;
+    }
+
+    @media (max-width: 992px) {
+        .navbar-collapse {
+            background: linear-gradient(135deg, #068633 0%, #2a5298 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        .nav-link {
+            margin: 8px 0;
+            padding: 10px 0;
+        }
+
+        .nav-link.active::after {
+            bottom: 5px;
+        }
+    }
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+        <a class="navbar-brand" style="color: #b5c80f; font-weight: 600; font-style: oblique;"
+            href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='images/site_logo.jpg') }}" alt="LuxStay Logo"
+                class="site-logo me-2">
+            LuxStay
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link {{ 'active' if request.endpoint == 'index' }}"
+                        href="{{ url_for('index') }}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ 'active' if request.endpoint == 'hotels' }}"
+                        href="{{ url_for('hotels') }}">Hotels</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ 'active' if request.endpoint == 'about' }}"
+                        href="{{ url_for('about') }}">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ 'active' if request.endpoint == 'contact' }}"
+                        href="{{ url_for('contact') }}">Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ 'active' if request.endpoint == 'login' }}"
+                        href="{{ url_for('login') }}">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ 'active' if request.endpoint == 'register' }}"
+                        href="{{ url_for('register') }}">Register</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const themeToggleBtn = document.getElementById("themeToggleBtn");
+        const body = document.body;
+
+        // Load saved theme
+        if (localStorage.getItem("theme") === "dark") {
+            body.classList.add("dark-theme");
+            themeToggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+    });
+</script>
